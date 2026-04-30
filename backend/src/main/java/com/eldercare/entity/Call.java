@@ -29,16 +29,20 @@ public class Call {
 	/**
 	 * 통화자 정보
 	 */
-	@Column(name = "caller_id", nullable = false)
-	private String callerId;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "caller_id", nullable = false, updatable = false)
+	private Guardian caller;
 
-	@Column(name = "receiver_id", nullable = false)
-	private String receiverId;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "receiver_id", nullable = false, updatable = false)
+	private Guardian receiver;
 
-	// TODO: Elder와의 관계 설정
-	// @ManyToOne
-	// @JoinColumn(name = "elder_id")
-	// private Elder elder;
+	/**
+	 * 피호출 대상자 (노인)
+	 */
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "elder_id")
+	private Elder elder;
 
 	/**
 	 * 통화 유형

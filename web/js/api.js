@@ -1,301 +1,395 @@
-/*
-  API 요청 유틸리티
+/**
+ * 백엔드 API 호출 유틸리티
+ *
+ * REST API를 통한 서버 통신
+ *
+ * TODO: 오프라인 캐싱
+ * TODO: 요청 재시도
+ * TODO: 타임아웃 처리
+ * TODO: 에러 처리
+ */
 
-  TODO: API 엔드포인트 정의
-  TODO: 인증 토큰 관리
-  TODO: 요청/응답 인터셉터
-  TODO: 에러 처리
-  TODO: 타임아웃 설정
-*/
+const API = {
+    // TODO: 환경 변수로 설정
+    baseURL: 'http://localhost:8080/api',
+    timeout: 10000,
+    retryAttempts: 3,
+    retryDelay: 1000,
 
-const API_BASE_URL = 'http://localhost:3000/api';
+    /**
+     * HTTP 요청 (공통)
+     */
+    request: async function (method, endpoint, data = null, options = {}) {
+        const url = this.baseURL + endpoint;
+        const headers = {
+            'Content-Type': 'application/json'
+        };
 
-// 기본 헤더 설정
-const DEFAULT_HEADERS = {
-    'Content-Type': 'application/json'
+        // 인증 토큰 추가
+        const token = localStorage.getItem('authToken');
+        if (token) {
+            headers['Authorization'] = 'Bearer ' + token;
+        }
+
+        const config = {
+            method: method,
+            headers: headers,
+            timeout: options.timeout || this.timeout
+        };
+
+        if (data && (method === 'POST' || method === 'PUT')) {
+            config.body = JSON.stringify(data);
+        }
+
+        try {
+            console.log(`${method} ${endpoint}`);
+
+            const response = await fetch(url, config);
+
+            if (!response.ok) {
+                // 401 인증 실패
+                if (response.status === 401) {
+                    console.error('인증 실패');
+                    // 로그인 페이지로 이동
+                    localStorage.removeItem('authToken');
+                    localStorage.removeItem('user');
+                    window.location.href = 'login.html';
+                }
+
+                throw new Error(`HTTP ${response.status}`);
+            }
+
+            const result = await response.json();
+            return result;
+        } catch (error) {
+            console.error('API 요청 실패:', error);
+            throw error;
+        }
+    },
+
+    // ====================================
+    // 인증
+    // ====================================
+
+    login: async function (email, password) {
+        return this.request('POST', '/auth/login', {
+            email: email,
+            password: password
+        });
+    },
+
+    // ====================================
+    // 보호자 데이터
+    // ====================================
+
+    /**
+     * 관리 대상자 목록
+     */
+    getManagedElderlies: async function () {
+        return this.request('GET', '/guardian/elderly-list');
+    },
+
+    /**
+     * 특정 노인의 건강 데이터
+     */
+    getElderlyHealthData: async function (elderlyId) {
+        return this.request('GET', `/guardian/elderly/${elderlyId}/health`);
+    },
+
+    /**
+     * 특정 노인의 활동 기록
+     */
+    getElderlyActivities: async function (elderlyId, filters = {}) {
+        const params = new URLSearchParams(filters);
+        return this.request('GET', `/guardian/elderly/${elderlyId}/activities?${params}`);
+    },
+
+    /**
+     * 대시보드 데이터 조회
+     */
+    getDashboardData: async function () {
+        return this.request('GET', '/guardian/dashboard');
+    },
+
+    /**
+     * 알림 목록
+     */
+    getNotifications: async function (page = 0, size = 20) {
+        return this.request('GET', `/guardian/notifications?page=${page}&size=${size}`);
+    },
+
+    /**
+     * 알림 읽음 처리
+     */
+    markNotificationAsRead: async function (notificationId) {
+        return this.request('PUT', `/guardian/notifications/${notificationId}/read`);
+    },
+
+    // ====================================
+    // 건강 데이터
+    // ====================================
+
+    /**
+     * 건강 데이터 조회
+     */
+    getHealthData: async function (filters = {}) {
+        const params = new URLSearchParams(filters);
+        return this.request('GET', `/health/records?${params}`);
+    },
+
+    /**
+     * 건강 데이터 상세 조회
+     */
+    getHealthRecords: async function (elderlyId, startDate, endDate) {
+        return this.request('GET', `/health/records?elderlyId=${elderlyId}&startDate=${startDate}&endDate=${endDate}`);
+    },
+
+    /**
+     * 건강 지표 통계
+     */
+    getHealthStats: async function (elderlyId) {
+        return this.request('GET', `/health/stats?elderlyId=${elderlyId}`);
+    },
+
+    // ====================================
+    // 활동 데이터
+    // ====================================
+
+    /**
+     * 활동 데이터 조회
+     */
+    getActivityData: async function (filters = {}) {
+        const params = new URLSearchParams(filters);
+        return this.request('GET', `/activities?${params}`);
+    },
+
+    /**
+     * 활동 통계
+     */
+    getActivityStats: async function (elderlyId) {
+        return this.request('GET', `/activities/stats?elderlyId=${elderlyId}`);
+    },
+
+    // ====================================
+    // 약물 관리
+    // ====================================
+
+    /**
+     * 약물 데이터 조회
+     */
+    getMedicineData: async function () {
+        return this.request('GET', '/medicines');
+    },
+
+    /**
+     * 약물 복용 기록
+     */
+    recordMedicineTaken: async function (medicineId) {
+        return this.request('POST', `/medicines/${medicineId}/taken`);
+    },
+
+    // ====================================
+    // 통화 기록
+    // ====================================
+
+    /**
+     * 통화 데이터 조회
+     */
+    getCallData: async function (filters = {}) {
+        const params = new URLSearchParams(filters);
+        return this.request('GET', `/calls?${params}`);
+    },
+
+    /**
+     * 통화 통계
+     */
+    getCallStats: async function (elderlyId) {
+        return this.request('GET', `/calls/stats?elderlyId=${elderlyId}`);
+    },
+
+    // ====================================
+    // 보고서
+    // ====================================
+
+    /**
+     * 보고서 데이터 조회
+     */
+    getReportData: async function (filters = {}) {
+        const params = new URLSearchParams(filters);
+        return this.request('GET', `/reports?${params}`);
+    },
+
+    /**
+     * 보고서 생성 및 다운로드
+     */
+    generateReport: async function (filters = {}) {
+        const params = new URLSearchParams(filters);
+        return this.request('GET', `/reports/generate?${params}`);
+    },
+
+    // ====================================
+    // 사용자 관리
+    // ====================================
+
+    /**
+     * 사용자 프로필
+     */
+    getUserProfile: async function () {
+        return this.request('GET', '/users/profile');
+    },
+
+    /**
+     * 프로필 업데이트
+     */
+    updateProfile: async function (profileData) {
+        return this.request('PUT', '/users/profile', profileData);
+    },
+
+    /**
+     * 알림 설정 조회
+     */
+    getNotificationSettings: async function () {
+        return this.request('GET', '/users/notification-settings');
+    },
+
+    /**
+     * 알림 설정 업데이트
+     */
+    updateNotificationSettings: async function (settings) {
+        return this.request('PUT', '/users/notification-settings', settings);
+    },
+
+    /**
+     * 비밀번호 변경
+     */
+    changePassword: async function (oldPassword, newPassword) {
+        return this.request('POST', '/users/change-password', {
+            oldPassword: oldPassword,
+            newPassword: newPassword
+        });
+    },
+
+    // ====================================
+    // 대상자 관리
+    // ====================================
+
+    /**
+     * 대상자 추가
+     */
+    addElderly: async function (elderlyData) {
+        return this.request('POST', '/guardian/elderly', elderlyData);
+    },
+
+    /**
+     * 대상자 정보 업데이트
+     */
+    updateElderly: async function (elderlyId, elderlyData) {
+        return this.request('PUT', `/guardian/elderly/${elderlyId}`, elderlyData);
+    },
+
+    /**
+     * 대상자 제거
+     */
+    removeElderly: async function (elderlyId) {
+        return this.request('DELETE', `/guardian/elderly/${elderlyId}`);
+    },
+
+    // ====================================
+    // 약물 관리
+    // ====================================
+
+    /**
+     * 약물 추가
+     */
+    addMedicine: async function (medicineData) {
+        return this.request('POST', '/medicines', medicineData);
+    },
+
+    /**
+     * 약물 업데이트
+     */
+    updateMedicine: async function (medicineId, medicineData) {
+        return this.request('PUT', `/medicines/${medicineId}`, medicineData);
+    },
+
+    /**
+     * 약물 삭제
+     */
+    removeMedicine: async function (medicineId) {
+        return this.request('DELETE', `/medicines/${medicineId}`);
+    },
+
+    // ====================================
+    // 검색 및 필터
+    // ====================================
+
+    /**
+     * 건강 데이터 검색
+     */
+    searchHealthData: async function (keyword, filters = {}) {
+        const params = new URLSearchParams({
+            q: keyword,
+            ...filters
+        });
+        return this.request('GET', `/health/search?${params}`);
+    },
+
+    /**
+     * 활동 데이터 검색
+     */
+    searchActivities: async function (keyword, filters = {}) {
+        const params = new URLSearchParams({
+            q: keyword,
+            ...filters
+        });
+        return this.request('GET', `/activities/search?${params}`);
+    },
+
+    // ====================================
+    // 모니터링
+    // ====================================
+
+    /**
+     * 실시간 알림 구독 (Server-Sent Events)
+     */
+    subscribeToNotifications: function (callback) {
+        const token = localStorage.getItem('authToken');
+        const eventSource = new EventSource(
+            `${this.baseURL}/notifications/stream?token=${token}`
+        );
+
+        eventSource.onmessage = function (event) {
+            const notification = JSON.parse(event.data);
+            callback(notification);
+        };
+
+        eventSource.onerror = function (error) {
+            console.error('알림 스트림 오류:', error);
+            eventSource.close();
+        };
+
+        return eventSource;
+    }
 };
 
-/*
-  TODO: 사용자 관련 API
-  - 사용자 목록 조회
-  - 사용자 상세 정보 조회
-  - 사용자 추가
-  - 사용자 편집
-  - 사용자 삭제
-*/
-async function getUsers() {
-    return fetchAPI(`${API_BASE_URL}/users`, 'GET');
-}
+// ====================================
+// 에러 핸들링
+// ====================================
 
-async function getUserById(userId) {
-    return fetchAPI(`${API_BASE_URL}/users/${userId}`, 'GET');
-}
+/**
+ * API 에러 처리
+ */
+function handleAPIError(error) {
+    console.error('API 에러:', error);
 
-async function createUser(userData) {
-    return fetchAPI(`${API_BASE_URL}/users`, 'POST', userData);
-}
-
-async function updateUser(userId, userData) {
-    return fetchAPI(`${API_BASE_URL}/users/${userId}`, 'PUT', userData);
-}
-
-async function deleteUser(userId) {
-    return fetchAPI(`${API_BASE_URL}/users/${userId}`, 'DELETE');
-}
-
-/*
-  TODO: 건강 데이터 관련 API
-  - 건강 기록 조회
-  - 건강 기록 추가
-  - 건강 기록 편집
-  - 건강 기록 삭제
-  - 건강 지표 통계
-*/
-async function getHealthRecords(userId, startDate, endDate) {
-    const params = new URLSearchParams({
-        startDate: startDate,
-        endDate: endDate
-    });
-    return fetchAPI(`${API_BASE_URL}/users/${userId}/health?${params}`, 'GET');
-}
-
-async function addHealthRecord(userId, healthData) {
-    return fetchAPI(`${API_BASE_URL}/users/${userId}/health`, 'POST', healthData);
-}
-
-async function getHealthStats(userId) {
-    return fetchAPI(`${API_BASE_URL}/users/${userId}/health/stats`, 'GET');
-}
-
-/*
-  TODO: 약물 복용 관련 API
-  - 약물 목록 조회
-  - 약물 추가
-  - 약물 편집
-  - 약물 삭제
-  - 복용 기록 조회
-  - 복용 여부 기록
-*/
-async function getMedicines(userId) {
-    return fetchAPI(`${API_BASE_URL}/users/${userId}/medicines`, 'GET');
-}
-
-async function addMedicine(userId, medicineData) {
-    return fetchAPI(`${API_BASE_URL}/users/${userId}/medicines`, 'POST', medicineData);
-}
-
-async function recordMedicineTaken(userId, medicineId) {
-    return fetchAPI(`${API_BASE_URL}/users/${userId}/medicines/${medicineId}/taken`, 'POST');
-}
-
-async function getMedicineSchedule(userId) {
-    return fetchAPI(`${API_BASE_URL}/users/${userId}/medicines/schedule`, 'GET');
-}
-
-/*
-  TODO: 일정 관련 API
-  - 일정 목록 조회
-  - 일정 추가
-  - 일정 편집
-  - 일정 삭제
-  - 일정 알림 설정
-*/
-async function getSchedules(userId, startDate, endDate) {
-    const params = new URLSearchParams({
-        startDate: startDate,
-        endDate: endDate
-    });
-    return fetchAPI(`${API_BASE_URL}/users/${userId}/schedules?${params}`, 'GET');
-}
-
-async function addSchedule(userId, scheduleData) {
-    return fetchAPI(`${API_BASE_URL}/users/${userId}/schedules`, 'POST', scheduleData);
-}
-
-async function updateSchedule(userId, scheduleId, scheduleData) {
-    return fetchAPI(`${API_BASE_URL}/users/${userId}/schedules/${scheduleId}`, 'PUT', scheduleData);
-}
-
-async function deleteSchedule(userId, scheduleId) {
-    return fetchAPI(`${API_BASE_URL}/users/${userId}/schedules/${scheduleId}`, 'DELETE');
-}
-
-/*
-  TODO: 활동 관련 API
-  - 활동 로그 조회
-  - 활동 통계
-  - 걸음수 조회
-  - 활동 시간 조회
-*/
-async function getActivityLogs(userId, startDate, endDate) {
-    const params = new URLSearchParams({
-        startDate: startDate,
-        endDate: endDate
-    });
-    return fetchAPI(`${API_BASE_URL}/users/${userId}/activities?${params}`, 'GET');
-}
-
-async function getActivityStats(userId) {
-    return fetchAPI(`${API_BASE_URL}/users/${userId}/activities/stats`, 'GET');
-}
-
-/*
-  TODO: 알림 관련 API
-  - 알림 목록 조회
-  - 알림 읽음 처리
-  - 알림 삭제
-  - 알림 설정 변경
-*/
-async function getNotifications(userId) {
-    return fetchAPI(`${API_BASE_URL}/users/${userId}/notifications`, 'GET');
-}
-
-async function markNotificationAsRead(notificationId) {
-    return fetchAPI(`${API_BASE_URL}/notifications/${notificationId}/read`, 'POST');
-}
-
-async function updateNotificationSettings(userId, settings) {
-    return fetchAPI(`${API_BASE_URL}/users/${userId}/notification-settings`, 'PUT', settings);
-}
-
-/*
-  TODO: 인증 관련 API
-  - 로그인
-  - 로그아웃
-  - 토큰 갱신
-  - 비밀번호 변경
-*/
-async function login(username, password) {
-    return fetchAPI(`${API_BASE_URL}/auth/login`, 'POST', {
-        username: username,
-        password: password
-    });
-}
-
-async function logout() {
-    return fetchAPI(`${API_BASE_URL}/auth/logout`, 'POST');
-}
-
-async function changePassword(userId, oldPassword, newPassword) {
-    return fetchAPI(`${API_BASE_URL}/users/${userId}/change-password`, 'POST', {
-        oldPassword: oldPassword,
-        newPassword: newPassword
-    });
-}
-
-/*
-  TODO: 의료 데이터 API
-  - 의료 기록 조회
-  - 처방약 조회
-  - 알레르기 정보
-  - 건강 조건 조회
-*/
-async function getMedicalRecords(userId) {
-    return fetchAPI(`${API_BASE_URL}/users/${userId}/medical-records`, 'GET');
-}
-
-async function getAllergies(userId) {
-    return fetchAPI(`${API_BASE_URL}/users/${userId}/allergies`, 'GET');
-}
-
-async function getHealthConditions(userId) {
-    return fetchAPI(`${API_BASE_URL}/users/${userId}/health-conditions`, 'GET');
-}
-
-/*
-  기본 API 요청 함수
-
-  TODO: 요청 재시도 로직
-  TODO: 요청 캐싱
-  TODO: 요청/응답 로깅
-  TODO: 타임아웃 처리
-*/
-async function fetchAPI(url, method = 'GET', data = null) {
-    const options = {
-        method: method,
-        headers: DEFAULT_HEADERS
-    };
-
-    // 인증 토큰 추가
-    const token = localStorage.getItem('authToken');
-    if (token) {
-        options.headers['Authorization'] = `Bearer ${token}`;
-    }
-
-    // 요청 본문 추가 (POST, PUT의 경우)
-    if (data && (method === 'POST' || method === 'PUT')) {
-        options.body = JSON.stringify(data);
-    }
-
-    try {
-        console.log(`API 요청: ${method} ${url}`);
-
-        const response = await fetch(url, options);
-
-        // 응답 처리
-        if (!response.ok) {
-            // TODO: 401 (인증 실패) 처리
-            if (response.status === 401) {
-                console.error('인증 실패. 로그인 페이지로 리다이렉트됩니다.');
-                // window.location.href = '/login.html';
-            }
-
-            // TODO: 다른 에러 코드 처리
-            throw new Error(`API 요청 실패: ${response.status} ${response.statusText}`);
-        }
-
-        // 응답 파싱
-        const responseData = await response.json();
-        console.log(`API 응답: ${method} ${url}`, responseData);
-
-        return responseData;
-    } catch (error) {
-        console.error(`API 요청 중 오류 발생: ${error.message}`);
-        // TODO: 에러 처리 및 사용자 알림
-        throw error;
-    }
-}
-
-/*
-  TODO: API 요청 재시도 로직
-  지수 백오프를 사용한 재시도
-*/
-async function fetchAPIWithRetry(url, method = 'GET', data = null, maxRetries = 3) {
-    let lastError;
-
-    for (let i = 0; i < maxRetries; i++) {
-        try {
-            return await fetchAPI(url, method, data);
-        } catch (error) {
-            lastError = error;
-            if (i < maxRetries - 1) {
-                const delay = Math.pow(2, i) * 1000; // 지수 백오프: 1초, 2초, 4초
-                console.log(`${delay}ms 후 재시도합니다. (${i + 1}/${maxRetries})`);
-                await new Promise(resolve => setTimeout(resolve, delay));
-            }
-        }
-    }
-
-    throw lastError;
-}
-
-/*
-  TODO: API 요청 취소 로직
-  AbortController를 사용한 요청 취소
-*/
-const requestControllers = new Map();
-
-function createAbortSignal(requestId) {
-    const controller = new AbortController();
-    requestControllers.set(requestId, controller);
-    return controller.signal;
-}
-
-function cancelRequest(requestId) {
-    const controller = requestControllers.get(requestId);
-    if (controller) {
-        controller.abort();
-        requestControllers.delete(requestId);
+    if (error instanceof TypeError) {
+        console.error('네트워크 오류: 서버에 연결할 수 없습니다');
+        alert('네트워크 오류: 인터넷 연결을 확인하세요');
+    } else if (error instanceof SyntaxError) {
+        console.error('JSON 파싱 오류');
+        alert('서버 응답 오류가 발생했습니다');
+    } else {
+        alert('오류: ' + error.message);
     }
 }
 

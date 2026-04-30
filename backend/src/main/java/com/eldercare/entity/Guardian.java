@@ -56,16 +56,33 @@ public class Guardian {
 	private String permissions;  // TODO: JSON으로 저장
 
 	/**
-	 * 관리 대상 노인
+	 * 관리 대상 노인 (다대다 관계)
 	 */
-	// TODO: Elder와의 다대다 관계 설정
-	// @ManyToMany
-	// @JoinTable(
-	//     name = "guardian_elder",
-	//     joinColumns = @JoinColumn(name = "guardian_id"),
-	//     inverseJoinColumns = @JoinColumn(name = "elder_id")
-	// )
-	// private List<Elder> managedElderlies;
+	@ManyToMany(fetch = FetchType.LAZY)
+	@JoinTable(
+		name = "guardian_elderly",
+		joinColumns = @JoinColumn(name = "guardian_id"),
+		inverseJoinColumns = @JoinColumn(name = "elder_id")
+	)
+	private List<Elder> managedElderlies;
+
+	/**
+	 * 통화 기록 (발신자로서)
+	 */
+	@OneToMany(mappedBy = "caller", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+	private List<Call> initiatedCalls;
+
+	/**
+	 * 통화 기록 (수신자로서)
+	 */
+	@OneToMany(mappedBy = "receiver", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+	private List<Call> receivedCalls;
+
+	/**
+	 * 대화 기록
+	 */
+	@OneToMany(mappedBy = "guardian", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+	private List<Conversation> conversations;
 
 	/**
 	 * 상태 정보

@@ -77,18 +77,34 @@ public class Elder {
 	private String healthStatus;  // GOOD, CAUTION, WARNING, CRITICAL
 
 	/**
-	 * 보호자 정보
+	 * 보호자 정보 (다대다 관계)
 	 */
-	// TODO: Guardian과의 일대다 관계 설정
-	// @OneToMany(mappedBy = "elder", cascade = CascadeType.ALL)
-	// private List<Guardian> guardians;
+	@ManyToMany(mappedBy = "managedElderlies", fetch = FetchType.LAZY)
+	private List<Guardian> guardians;
 
 	/**
 	 * 통화 기록
 	 */
-	// TODO: Call과의 일대다 관계 설정
-	// @OneToMany(mappedBy = "elder", cascade = CascadeType.ALL)
-	// private List<Call> calls;
+	@OneToMany(mappedBy = "elder", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+	private List<Call> calls;
+
+	/**
+	 * 건강 기록
+	 */
+	@OneToMany(mappedBy = "elder", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+	private List<HealthRecord> healthRecords;
+
+	/**
+	 * 약물 기록
+	 */
+	@OneToMany(mappedBy = "elder", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+	private List<MedicineRecord> medicineRecords;
+
+	/**
+	 * 활동 기록
+	 */
+	@OneToMany(mappedBy = "elder", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+	private List<Activity> activities;
 
 	/**
 	 * 타임스탬프

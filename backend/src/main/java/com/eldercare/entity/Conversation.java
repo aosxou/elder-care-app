@@ -30,11 +30,13 @@ public class Conversation {
 	/**
 	 * 참여자 정보
 	 */
-	@Column(name = "participant_id", nullable = false)
-	private String participantId;  // 첫 번째 사용자
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "participant_id", nullable = false, updatable = false)
+	private Guardian participant;  // 첫 번째 사용자
 
-	@Column(name = "target_id")
-	private String targetId;  // 두 번째 사용자 또는 AI_ASSISTANT
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "target_id")
+	private Guardian target;  // 두 번째 사용자 (또는 null if AI_ASSISTANT)
 
 	@Column(name = "conversation_type")
 	private String conversationType;  // USER_TO_USER, USER_TO_AI, GROUP
@@ -123,9 +125,8 @@ public class Conversation {
 	/**
 	 * 메시지 (양방향 관계)
 	 */
-	// TODO: Message와의 일대다 관계 설정
-	// @OneToMany(mappedBy = "conversation", cascade = CascadeType.ALL, orphanRemoval = true)
-	// private List<Message> messages;
+	@OneToMany(mappedBy = "conversation", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+	private List<Message> messages;
 
 	/**
 	 * 참여자 정보 (그룹 대화의 경우)
