@@ -1,0 +1,54 @@
+{
+  "name": "elder-care-mobile",
+  "version": "1.0.0",
+  "description": "Elder Care Management System - Mobile App (Cordova)",
+  "main": "www/index.html",
+  "scripts": {
+    "start": "cordova serve",
+    "build": "cordova build",
+    "build:android": "cordova build android",
+    "build:ios": "cordova build ios",
+    "run": "cordova run browser",
+    "run:android": "cordova run android",
+    "run:ios": "cordova run ios",
+    "prepare": "cordova prepare",
+    "plugin:add": "cordova plugin add",
+    "plugin:remove": "cordova plugin remove",
+    "platform:add": "cordova platform add",
+    "platform:remove": "cordova platform remove",
+    "clean": "cordova clean"
+  },
+  "keywords": [
+    "elderly-care",
+    "health-monitoring",
+    "cordova",
+    "mobile"
+  ],
+  "author": "Elder Care Team",
+  "license": "MIT",
+  "dependencies": {
+    "cordova": "^12.0.0"
+  },
+  "devDependencies": {
+    "cordova-cli": "^12.0.0"
+  },
+  "cordova": {
+    "plugins": {
+      "cordova-plugin-device": {},
+      "cordova-plugin-inappbrowser": {},
+      "cordova-plugin-network-information": {},
+      "cordova-plugin-statusbar": {},
+      "cordova-plugin-splashscreen": {},
+      "cordova-plugin-local-notification": {}
+    },
+    "platforms": [
+      "browser",
+      "android",
+      "ios"
+    ]
+  },
+  "engines": {
+    "node": ">=14.0.0",
+    "npm": ">=6.0.0"
+  }
+}

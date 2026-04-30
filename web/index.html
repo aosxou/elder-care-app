@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>노인 돌봄 관리 시스템 - 웹 대시보드</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- 헤더 -->
+        <header>
+            <!-- TODO: 로고 및 타이틀 구현 -->
+            <!-- TODO: 로그인/로그아웃 기능 -->
+            <!-- TODO: 사용자 프로필 메뉴 -->
+            <h1>노인 돌봄 관리 시스템</h1>
+            <nav class="navbar">
+                <ul>
+                    <li><a href="#dashboard">대시보드</a></li>
+                    <li><a href="#patients">노인 사용자</a></li>
+                    <li><a href="#health">건강 관리</a></li>
+                    <li><a href="#schedule">일정 관리</a></li>
+                    <li><a href="#settings">설정</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <main>
+            <!-- 대시보드 섹션 -->
+            <section id="dashboard" class="section">
+                <h2>대시보드</h2>
+                <!-- TODO: 실시간 건강 지표 모니터링 (혈압, 맥박, 혈당 등) -->
+                <!-- TODO: 최근 활동 로그 표시 -->
+                <!-- TODO: 긴급 알림 표시 -->
+                <div class="dashboard-grid">
+                    <div class="card">
+                        <h3>건강 지표</h3>
+                        <p>혈압: --</p>
+                        <p>맥박: --</p>
+                        <p>혈당: --</p>
+                    </div>
+                    <div class="card">
+                        <h3>약물 복용</h3>
+                        <p>오늘 복용: --</p>
+                        <p>다음 복용: --</p>
+                    </div>
+                    <div class="card">
+                        <h3>활동</h3>
+                        <p>보행 거리: -- km</p>
+                        <p>활동 시간: -- 시간</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 노인 사용자 관리 섹션 -->
+            <section id="patients" class="section">
+                <h2>노인 사용자 관리</h2>
+                <!-- TODO: 사용자 목록 표시 -->
+                <!-- TODO: 사용자 추가/편집/삭제 기능 -->
+                <!-- TODO: 사용자 검색 기능 -->
+                <!-- TODO: 사용자 상세 정보 조회 -->
+                <button class="btn btn-primary">사용자 추가</button>
+                <table class="user-table">
+                    <thead>
+                        <tr>
+                            <th>이름</th>
+                            <th>나이</th>
+                            <th>건강 상태</th>
+                            <th>마지막 업데이트</th>
+                            <th>관리</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- TODO: 동적으로 사용자 목록 로드 -->
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- 건강 관리 섹션 -->
+            <section id="health" class="section">
+                <h2>건강 관리</h2>
+                <!-- TODO: 건강 기록 입력 기능 -->
+                <!-- TODO: 건강 지표 그래프 표시 (시간별, 날짜별, 월별) -->
+                <!-- TODO: 의료 기록 관리 -->
+                <!-- TODO: 처방약 관리 -->
+                <!-- TODO: 알레르기 및 건강 조건 기록 -->
+                <div class="health-section">
+                    <h3>건강 기록 입력</h3>
+                    <form id="healthForm">
+                        <input type="text" placeholder="혈압" required>
+                        <input type="text" placeholder="맥박" required>
+                        <input type="text" placeholder="혈당" required>
+                        <textarea placeholder="특이사항"></textarea>
+                        <button type="submit" class="btn btn-primary">저장</button>
+                    </form>
+                </div>
+                <div class="health-section">
+                    <h3>건강 지표 차트</h3>
+                    <canvas id="healthChart"></canvas>
+                </div>
+            </section>
+
+            <!-- 일정 관리 섹션 -->
+            <section id="schedule" class="section">
+                <h2>일정 관리</h2>
+                <!-- TODO: 약물 복용 일정 설정 -->
+                <!-- TODO: 병원 방문 일정 -->
+                <!-- TODO: 운동/활동 일정 -->
+                <!-- TODO: 일정 알림 설정 -->
+                <div class="schedule-section">
+                    <h3>일정 추가</h3>
+                    <form id="scheduleForm">
+                        <input type="text" placeholder="일정 제목" required>
+                        <input type="datetime-local" required>
+                        <select required>
+                            <option>약물 복용</option>
+                            <option>병원 방문</option>
+                            <option>운동</option>
+                            <option>기타</option>
+                        </select>
+                        <button type="submit" class="btn btn-primary">추가</button>
+                    </form>
+                </div>
+                <div class="calendar">
+                    <!-- TODO: 캘린더 구현 -->
+                </div>
+            </section>
+
+            <!-- 설정 섹션 -->
+            <section id="settings" class="section">
+                <h2>설정</h2>
+                <!-- TODO: 사용자 프로필 편집 -->
+                <!-- TODO: 비밀번호 변경 -->
+                <!-- TODO: 알림 설정 -->
+                <!-- TODO: 시스템 설정 -->
+                <!-- TODO: 데이터 백업 -->
+                <form id="settingsForm">
+                    <fieldset>
+                        <legend>알림 설정</legend>
+                        <label><input type="checkbox" checked> 건강 지표 경고</label>
+                        <label><input type="checkbox" checked> 약물 복용 알림</label>
+                        <label><input type="checkbox" checked> 비상 알림</label>
+                    </fieldset>
+                    <fieldset>
+                        <legend>시스템 설정</legend>
+                        <label>언어: <select><option>한국어</option><option>English</option></select></label>
+                        <label>테마: <select><option>라이트</option><option>다크</option></select></label>
+                    </fieldset>
+                    <button type="submit" class="btn btn-primary">저장</button>
+                </form>
+            </section>
+        </main>
+
+        <!-- 푸터 -->
+        <footer>
+            <!-- TODO: 저작권 정보 -->
+            <!-- TODO: 개인정보 처리방침 링크 -->
+            <!-- TODO: 도움말 링크 -->
+            <p>&copy; 2024 노인 돌봄 관리 시스템. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script src="js/main.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/chart.js"></script>
+</body>
+</html>

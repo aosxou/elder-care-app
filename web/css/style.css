@@ -1,0 +1,342 @@
+/*
+  TODO: 반응형 디자인 구현
+  TODO: 다크 테마 지원
+  TODO: 접근성 개선 (WCAG 2.1)
+  TODO: 애니메이션 및 전환 효과
+  TODO: 모바일 최적화
+*/
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    background-color: #f5f5f5;
+    color: #333;
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* 헤더 스타일 */
+header {
+    background-color: #2c3e50;
+    color: white;
+    padding: 20px 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    /* TODO: 반응형 헤더 구현 */
+}
+
+header h1 {
+    font-size: 24px;
+    margin-bottom: 15px;
+}
+
+.navbar ul {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.navbar a {
+    color: white;
+    text-decoration: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+    /* TODO: 활성 탭 표시 */
+}
+
+.navbar a:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* 메인 콘텐츠 */
+main {
+    padding: 30px 0;
+    min-height: calc(100vh - 200px);
+}
+
+.section {
+    background-color: white;
+    border-radius: 8px;
+    padding: 25px;
+    margin-bottom: 30px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    /* TODO: 섹션 트랜지션 애니메이션 */
+}
+
+.section h2 {
+    font-size: 22px;
+    color: #2c3e50;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #3498db;
+    padding-bottom: 10px;
+}
+
+.section h3 {
+    font-size: 18px;
+    color: #2c3e50;
+    margin-bottom: 15px;
+}
+
+/* 버튼 스타일 */
+.btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+    /* TODO: 로딩 상태 표시 */
+    /* TODO: 다양한 버튼 크기 (sm, md, lg) */
+}
+
+.btn-primary {
+    background-color: #3498db;
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: #2980b9;
+}
+
+/* 대시보드 그리드 */
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    /* TODO: 반응형 그리드 조정 */
+}
+
+.card {
+    background-color: #ecf0f1;
+    padding: 20px;
+    border-radius: 8px;
+    border-left: 4px solid #3498db;
+    /* TODO: 카드 호버 효과 */
+    /* TODO: 카드 클릭 상호작용 */
+}
+
+.card h3 {
+    margin-bottom: 15px;
+    color: #2c3e50;
+}
+
+.card p {
+    margin-bottom: 10px;
+    font-size: 14px;
+}
+
+/* 테이블 스타일 */
+.user-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    /* TODO: 테이블 페이지네이션 */
+    /* TODO: 테이블 정렬 기능 */
+    /* TODO: 테이블 필터링 */
+}
+
+.user-table thead {
+    background-color: #ecf0f1;
+}
+
+.user-table th {
+    padding: 12px;
+    text-align: left;
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+.user-table td {
+    padding: 12px;
+    border-bottom: 1px solid #ecf0f1;
+}
+
+.user-table tr:hover {
+    background-color: #f9f9f9;
+    /* TODO: 행 선택 체크박스 */
+}
+
+/* 폼 스타일 */
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="datetime-local"],
+select,
+textarea {
+    padding: 12px;
+    border: 1px solid #bdc3c7;
+    border-radius: 4px;
+    font-size: 14px;
+    font-family: inherit;
+    transition: border-color 0.3s ease;
+    /* TODO: 입력 필드 포커스 스타일 */
+    /* TODO: 유효성 검사 피드백 */
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus,
+input[type="datetime-local"]:focus,
+select:focus,
+textarea:focus {
+    outline: none;
+    border-color: #3498db;
+    box-shadow: 0 0 5px rgba(52, 152, 219, 0.3);
+}
+
+textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+fieldset {
+    border: 1px solid #bdc3c7;
+    border-radius: 4px;
+    padding: 15px;
+    margin-bottom: 15px;
+}
+
+legend {
+    padding: 0 10px;
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+    cursor: pointer;
+}
+
+/* 건강 섹션 */
+.health-section {
+    margin-bottom: 30px;
+}
+
+#healthChart {
+    width: 100%;
+    height: 400px;
+    margin-top: 20px;
+    /* TODO: Chart.js 통합 */
+    /* TODO: 다양한 차트 타입 (선, 막대, 원형) */
+}
+
+/* 일정 섹션 */
+.schedule-section {
+    margin-bottom: 30px;
+}
+
+.calendar {
+    margin-top: 20px;
+    /* TODO: 캘린더 위젯 구현 (fullcalendar 라이브러리 사용) */
+    /* TODO: 드래그 앤 드롭으로 일정 관리 */
+    /* TODO: 일정 알림 표시 */
+}
+
+/* 푸터 */
+footer {
+    background-color: #2c3e50;
+    color: white;
+    text-align: center;
+    padding: 20px 0;
+    margin-top: 50px;
+}
+
+footer p {
+    margin: 0;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+    .navbar ul {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .user-table {
+        font-size: 12px;
+    }
+
+    .user-table th,
+    .user-table td {
+        padding: 8px;
+    }
+
+    form {
+        gap: 10px;
+    }
+
+    /* TODO: 모바일 메뉴 (햄버거 메뉴) */
+    /* TODO: 터치 친화적 버튼 크기 */
+    /* TODO: 모바일 폰트 크기 조정 */
+}
+
+@media (max-width: 480px) {
+    header h1 {
+        font-size: 18px;
+    }
+
+    .section {
+        padding: 15px;
+        margin-bottom: 20px;
+    }
+
+    .section h2 {
+        font-size: 18px;
+    }
+
+    /* TODO: 초소형 기기용 최적화 */
+}
+
+/* 다크 모드 */
+@media (prefers-color-scheme: dark) {
+    /* TODO: 다크 모드 색상 스킴 */
+    /* TODO: 명도 대비 유지 (접근성) */
+}
+
+/* 추가적인 유틸리티 클래스 */
+.hidden {
+    display: none;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.mt-20 {
+    margin-top: 20px;
+}
+
+.mb-20 {
+    margin-bottom: 20px;
+}
+
+/* TODO: 로딩 스피너 스타일 */
+/* TODO: 토스트 알림 스타일 */
+/* TODO: 모달 창 스타일 */
+/* TODO: 에러 메시지 스타일 */
+/* TODO: 성공 메시지 스타일 */

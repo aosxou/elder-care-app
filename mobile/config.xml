@@ -1,0 +1,115 @@
+<?xml version='1.0' encoding='utf-8'?>
+<widget id="com.eldercare.mobile" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <!--
+        Cordova 애플리케이션 설정
+
+        TODO: 앱 아이콘 설정 (res/icon/)
+        TODO: 앱 스플래시 화면 설정 (res/screen/)
+        TODO: 플랫폼별 설정 추가 (iOS, Android)
+        TODO: 플러그인 의존성 정의
+    -->
+
+    <!-- 앱 기본 정보 -->
+    <name>Elder Care Mobile</name>
+    <description>노인 돌봄 관리 모바일 애플리케이션</description>
+    <author email="support@eldercare.com" href="https://eldercare.com">Elder Care Team</author>
+
+    <!-- 시작 페이지 -->
+    <content src="index.html" />
+
+    <!-- 허용 네비게이션 -->
+    <allow-navigation href="http://localhost/*" />
+    <allow-navigation href="http://127.0.0.1/*" />
+    <allow-navigation href="http://*/*" />
+    <allow-navigation href="https://*/*" />
+
+    <!-- 외부 URL 열기 허용 -->
+    <allow-intent href="http://*/*" />
+    <allow-intent href="https://*/*" />
+    <allow-intent href="tel:*" />
+    <allow-intent href="sms:*" />
+    <allow-intent href="mailto:*" />
+    <allow-intent href="geo:*" />
+
+    <!-- 보안 정책 -->
+    <meta-content-security-policy content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *; img-src 'self' data: content:;" />
+
+    <!-- 환경 설정 -->
+    <preference name="loglevel" value="LOG" />
+    <preference name="AndroidLaunchMode" value="singleTop" />
+    <preference name="android-minSdkVersion" value="28" />
+    <preference name="android-targetSdkVersion" value="33" />
+    <preference name="ios-deployment-target" value="12.0" />
+    <preference name="BackupWebStorage" value="none" />
+    <preference name="KeyboardDisplayRequiresUserAction" value="false" />
+    <preference name="GapBetweenPages" value="0" />
+    <preference name="PageTitle" value="Elder Care" />
+
+    <!-- 화면 방향 -->
+    <preference name="Orientation" value="portrait" />  <!-- TODO: 가로/세로 방향 설정 -->
+
+    <!-- 상태 표시줄 설정 -->
+    <preference name="StatusBarBackgroundColor" value="#2c3e50" />
+    <preference name="StatusBarStyle" value="blacktranslucent" />
+    <preference name="StatusBarOverlaysWebView" value="false" />
+
+    <!-- 키보드 설정 -->
+    <preference name="KeyboardDisplayRequiresUserAction" value="false" />
+
+    <!-- 스플래시 화면 -->
+    <preference name="SplashScreen" value="screen" />
+    <preference name="SplashScreenDelay" value="3000" />
+    <preference name="FadeSplashScreen" value="true" />
+    <preference name="FadeSplashScreenDuration" value="1000" />
+
+    <!--
+        TODO: 플러그인 추가
+
+        필수 플러그인:
+        - cordova-plugin-device
+        - cordova-plugin-inappbrowser
+        - cordova-plugin-network-information
+        - cordova-plugin-statusbar
+        - cordova-plugin-splashscreen
+
+        권장 플러그인:
+        - cordova-plugin-local-notification (로컬 알림)
+        - cordova-plugin-media (음성 녹음/재생)
+        - cordova-plugin-contacts (연락처)
+        - cordova-plugin-geolocation (위치 정보)
+        - cordova-plugin-camera (카메라)
+        - cordova-plugin-webrtc (WebRTC)
+    -->
+
+    <!-- 필수 플러그인 -->
+    <plugin name="cordova-plugin-device" spec="~2.0.2" />
+    <plugin name="cordova-plugin-inappbrowser" spec="~5.0.0" />
+    <plugin name="cordova-plugin-network-information" spec="~2.0.2" />
+    <plugin name="cordova-plugin-statusbar" spec="~2.4.3" />
+    <plugin name="cordova-plugin-splashscreen" spec="~6.0.0" />
+
+    <!-- 로컬 알림 플러그인 -->
+    <plugin name="cordova-plugin-local-notification" spec="~10.2.0" />
+
+    <!-- WebRTC 플러그인 (선택적) -->
+    <!-- <plugin name="cordova-plugin-webrtc" spec="~1.0.0" /> -->
+
+    <!-- 플랫폼별 설정 -->
+    <platform name="ios">
+        <allow-intent href="itms:*" />
+        <allow-intent href="itms-apps:*" />
+        <!-- TODO: iOS 앱 아이콘 설정 -->
+        <!-- <icon src="res/icons/ios/icon.png" width="180" height="180" /> -->
+    </platform>
+
+    <platform name="android">
+        <allow-intent href="market:*" />
+        <!-- TODO: Android 앱 아이콘 설정 -->
+        <!-- <icon src="res/icons/android/icon-96x96.png" density="xhdpi" /> -->
+    </platform>
+
+    <!-- 엔진 설정 -->
+    <engine name="browser" spec="~6.0.0" />
+    <engine name="ios" spec="~6.0.0" />
+    <engine name="android" spec="~12.0.0" />
+</widget>

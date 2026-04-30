@@ -1,0 +1,68 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '3.2.0'
+	id 'io.spring.dependency-management' version '1.1.4'
+}
+
+group = 'com.eldercare'
+version = '1.0.0'
+sourceCompatibility = '17'
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	// Spring Boot Web & WebSocket
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-websocket'
+
+	// Spring Data JPA
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+	// Spring Security
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'io.jsonwebtoken:jjwt-api:0.12.3'
+	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.12.3'
+	runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.12.3'
+
+	// Spring AI
+	// TODO: Spring AI 버전 확인 및 Ollama 클라이언트 의존성 추가
+	implementation 'org.springframework.ai:spring-ai-ollama-spring-boot-starter:0.8.0'
+
+	// Database
+	runtimeOnly 'org.postgresql:postgresql'
+	implementation 'com.h2database:h2:2.2.220'
+
+	// Lombok
+	compileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'
+
+	// Validation
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+	// WebRTC & Real-time Communication
+	// TODO: WebRTC 라이브러리 추가 (예: kurento-client, janus-gateway)
+
+	// JSON Processing
+	implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml'
+
+	// Logging
+	implementation 'org.springframework.boot:spring-boot-starter-logging'
+
+	// Development Tools
+	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
+	// Testing
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'org.springframework.security:spring-security-test'
+	testImplementation 'junit:junit:4.13.2'
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
+
+// TODO: 빌드 타입별 프로필 설정 (dev, prod)
+// TODO: 자동 리소스 필터링 설정
+// TODO: Docker 빌드 설정
