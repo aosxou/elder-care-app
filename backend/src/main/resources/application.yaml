@@ -28,3 +28,7 @@ logging:
     org.hibernate.SQL: DEBUG
     org.hibernate.type.descriptor.sql.BasicBinder: TRACE
     com.eldercare.backend: DEBUG
+
+gemini:
+  api-key: AQ.Ab8RN6LiNgseQNmz5O6qttUfSw2FlCibXp82ODh8NGnE8i3Zgw
+  api-url: https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent

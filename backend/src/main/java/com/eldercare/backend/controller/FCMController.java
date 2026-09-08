@@ -15,22 +15,16 @@ public class FCMController {
         this.fcmService = fcmService;
     }
 
-    // FCM 토큰 등록 (앱에서 호출)
     @PostMapping("/register")
     public ResponseEntity<String> registerToken(@RequestBody TokenRequest request) {
         System.out.println("FCM 토큰 등록: " + request.getToken());
-        // TODO: DB에 토큰 저장
+        // TODO: 데이터베이스에 토큰 저장
         return ResponseEntity.ok("토큰 등록 완료");
     }
 
-    // 테스트 알림 전송
     @PostMapping("/test")
     public ResponseEntity<String> sendTest(@RequestBody TokenRequest request) {
-        fcmService.sendNotification(
-                request.getToken(),
-                "안부 전화 📞",
-                "안녕하세요! 오늘 하루도 건강하게 지내세요!"
-        );
+        fcmService.sendNotification(request.getToken(), "안부 전화 📞", "안녕하세요!");
         return ResponseEntity.ok("알림 전송 완료");
     }
 
