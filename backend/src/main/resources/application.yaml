@@ -5,7 +5,7 @@ spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/eldercare
     username: postgres
-    password: Asdf124578..
+    password: ${DB_PASSWORD}
     driver-class-name: org.postgresql.Driver
     hikari:
       maximum-pool-size: 10
@@ -30,5 +30,5 @@ logging:
     com.eldercare.backend: DEBUG
 
 gemini:
-  api-key: AQ.Ab8RN6LiNgseQNmz5O6qttUfSw2FlCibXp82ODh8NGnE8i3Zgw
+  api-key: ${GEMINI_API_KEY}
   api-url: https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent
