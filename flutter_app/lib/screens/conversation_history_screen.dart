@@ -22,14 +22,18 @@ class ConversationHistoryScreen extends StatelessWidget {
         'topic': '일상 대화',
         'sentiment': '긍정적',
         'duration': '15분',
+        'type': 'call',
+        'isUrgent': false,
       },
       {
         'date': '2024-12-15',
         'time': '09:45',
         'elder': '이할아버지',
-        'topic': '건강 확인',
+        'topic': '건강 비정상 감지',
         'sentiment': '중립적',
         'duration': '10분',
+        'type': 'chat',
+        'isUrgent': true,
       },
       {
         'date': '2024-12-14',
@@ -38,6 +42,8 @@ class ConversationHistoryScreen extends StatelessWidget {
         'topic': '추억 나누기',
         'sentiment': '긍정적',
         'duration': '25분',
+        'type': 'call',
+        'isUrgent': false,
       },
       {
         'date': '2024-12-14',
@@ -46,6 +52,8 @@ class ConversationHistoryScreen extends StatelessWidget {
         'topic': '약물 복용 알림',
         'sentiment': '중립적',
         'duration': '5분',
+        'type': 'chat',
+        'isUrgent': false,
       },
     ];
 
@@ -78,12 +86,28 @@ class ConversationHistoryScreen extends StatelessWidget {
                       ? const Color(0xFFF44336)
                       : const Color(0xFFFFA726);
 
+              bool isUrgent = conv['isUrgent'] as bool? ?? false;
+              String typeLabel = conv['type'] == 'call' ? '통화' : '채팅';
+              Color typeColor = conv['type'] == 'call' ? const Color(0xFF2196F3) : eAccent;
+
               return Container(
                 margin: const EdgeInsets.only(bottom: 12),
                 decoration: BoxDecoration(
                   color: eCard,
-                  border: Border.all(color: eLine),
+                  border: Border.all(
+                    color: isUrgent ? const Color(0xFFF44336) : eLine,
+                    width: isUrgent ? 2 : 1,
+                  ),
                   borderRadius: BorderRadius.circular(12),
+                  boxShadow: isUrgent
+                      ? [
+                          BoxShadow(
+                            color: const Color(0xFFF44336).withOpacity(0.2),
+                            blurRadius: 8,
+                            spreadRadius: 1,
+                          )
+                        ]
+                      : [],
                 ),
                 padding: const EdgeInsets.all(16),
                 child: Column(
@@ -96,13 +120,39 @@ class ConversationHistoryScreen extends StatelessWidget {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              conv['elder'],
-                              style: GoogleFonts.notoSansKr(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w700,
-                                color: eInk,
-                              ),
+                            Row(
+                              children: [
+                                Text(
+                                  conv['elder'],
+                                  style: GoogleFonts.notoSansKr(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w700,
+                                    color: eInk,
+                                  ),
+                                ),
+                                if (isUrgent)
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 8),
+                                    child: Container(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 6,
+                                        vertical: 2,
+                                      ),
+                                      decoration: BoxDecoration(
+                                        color: const Color(0xFFF44336),
+                                        borderRadius: BorderRadius.circular(4),
+                                      ),
+                                      child: const Text(
+                                        '긴급',
+                                        style: TextStyle(
+                                          fontSize: 10,
+                                          fontWeight: FontWeight.w700,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                              ],
                             ),
                             const SizedBox(height: 4),
                             Text(
@@ -114,23 +164,46 @@ class ConversationHistoryScreen extends StatelessWidget {
                             ),
                           ],
                         ),
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 10,
-                            vertical: 6,
-                          ),
-                          decoration: BoxDecoration(
-                            color: sentimentColor.withOpacity(0.15),
-                            borderRadius: BorderRadius.circular(6),
-                          ),
-                          child: Text(
-                            conv['sentiment'],
-                            style: TextStyle(
-                              fontSize: 11,
-                              fontWeight: FontWeight.w600,
-                              color: sentimentColor,
+                        Row(
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 10,
+                                vertical: 6,
+                              ),
+                              decoration: BoxDecoration(
+                                color: typeColor.withOpacity(0.15),
+                                borderRadius: BorderRadius.circular(6),
+                              ),
+                              child: Text(
+                                typeLabel,
+                                style: TextStyle(
+                                  fontSize: 11,
+                                  fontWeight: FontWeight.w600,
+                                  color: typeColor,
+                                ),
+                              ),
                             ),
-                          ),
+                            const SizedBox(width: 8),
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 10,
+                                vertical: 6,
+                              ),
+                              decoration: BoxDecoration(
+                                color: sentimentColor.withOpacity(0.15),
+                                borderRadius: BorderRadius.circular(6),
+                              ),
+                              child: Text(
+                                conv['sentiment'],
+                                style: TextStyle(
+                                  fontSize: 11,
+                                  fontWeight: FontWeight.w600,
+                                  color: sentimentColor,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
@@ -174,6 +247,24 @@ class ConversationHistoryScreen extends StatelessWidget {
                         Expanded(
                           child: OutlinedButton.icon(
                             onPressed: () {
+                              // 긴급 알림인 경우 즉시 알림 표시
+                              if (isUrgent) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: const Row(
+                                      children: [
+                                        Icon(Icons.warning_rounded, color: Colors.white),
+                                        SizedBox(width: 12),
+                                        Expanded(
+                                          child: Text('긴급: 즉시 확인 필요합니다.'),
+                                        ),
+                                      ],
+                                    ),
+                                    backgroundColor: const Color(0xFFF44336),
+                                    duration: const Duration(seconds: 3),
+                                  ),
+                                );
+                              }
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
@@ -185,6 +276,8 @@ class ConversationHistoryScreen extends StatelessWidget {
                                     topic: conv['topic'] as String,
                                     sentiment: conv['sentiment'] as String,
                                     duration: conv['duration'] as String,
+                                    type: conv['type'] as String,
+                                    isUrgent: isUrgent,
                                   ),
                                 ),
                               );

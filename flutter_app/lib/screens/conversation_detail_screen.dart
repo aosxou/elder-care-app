@@ -15,6 +15,8 @@ class ConversationDetailScreen extends StatelessWidget {
   final String topic;
   final String sentiment;
   final String duration;
+  final String type;
+  final bool isUrgent;
 
   const ConversationDetailScreen({
     super.key,
@@ -24,6 +26,8 @@ class ConversationDetailScreen extends StatelessWidget {
     required this.topic,
     required this.sentiment,
     required this.duration,
+    required this.type,
+    required this.isUrgent,
   });
 
   @override
@@ -34,6 +38,9 @@ class ConversationDetailScreen extends StatelessWidget {
         : sentiment == '부정적'
             ? const Color(0xFFF44336)
             : const Color(0xFFFFA726);
+
+    String typeLabel = type == 'call' ? '통화' : '채팅';
+    Color typeColor = type == 'call' ? const Color(0xFF2196F3) : eAccent;
 
     // 샘플 대화 내용
     final conversationMessages = [
@@ -97,13 +104,60 @@ class ConversationDetailScreen extends StatelessWidget {
               Container(
                 decoration: BoxDecoration(
                   color: eCard,
-                  border: Border.all(color: eLine),
+                  border: Border.all(
+                    color: isUrgent ? const Color(0xFFF44336) : eLine,
+                    width: isUrgent ? 2 : 1,
+                  ),
                   borderRadius: BorderRadius.circular(12),
+                  boxShadow: isUrgent
+                      ? [
+                          BoxShadow(
+                            color: const Color(0xFFF44336).withOpacity(0.2),
+                            blurRadius: 8,
+                            spreadRadius: 1,
+                          )
+                        ]
+                      : [],
                 ),
                 padding: const EdgeInsets.all(16),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    if (isUrgent)
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 12),
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 8,
+                          ),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFF44336).withOpacity(0.1),
+                            border: Border.all(color: const Color(0xFFF44336)),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Row(
+                            children: [
+                              const Icon(
+                                Icons.warning_rounded,
+                                color: Color(0xFFF44336),
+                                size: 20,
+                              ),
+                              const SizedBox(width: 8),
+                              const Expanded(
+                                child: Text(
+                                  '긴급 상황 - 즉시 확인 필요합니다.',
+                                  style: TextStyle(
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.w700,
+                                    color: Color(0xFFF44336),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -128,23 +182,46 @@ class ConversationDetailScreen extends StatelessWidget {
                             ),
                           ],
                         ),
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 12,
-                            vertical: 6,
-                          ),
-                          decoration: BoxDecoration(
-                            color: sentimentColor.withOpacity(0.15),
-                            borderRadius: BorderRadius.circular(6),
-                          ),
-                          child: Text(
-                            sentiment,
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w600,
-                              color: sentimentColor,
+                        Column(
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 12,
+                                vertical: 6,
+                              ),
+                              decoration: BoxDecoration(
+                                color: typeColor.withOpacity(0.15),
+                                borderRadius: BorderRadius.circular(6),
+                              ),
+                              child: Text(
+                                typeLabel,
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w600,
+                                  color: typeColor,
+                                ),
+                              ),
                             ),
-                          ),
+                            const SizedBox(height: 8),
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 12,
+                                vertical: 6,
+                              ),
+                              decoration: BoxDecoration(
+                                color: sentimentColor.withOpacity(0.15),
+                                borderRadius: BorderRadius.circular(6),
+                              ),
+                              child: Text(
+                                sentiment,
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w600,
+                                  color: sentimentColor,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
