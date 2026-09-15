@@ -24,19 +24,23 @@ class MedicationAlert {
   });
 }
 
-class EmergencyAlert {
+class HealthAlert {
+  final String alertId;
   final String type;
-  final String title;
+  final String elder;
   final String message;
   final String time;
   final String severity;
+  final String action;
 
-  EmergencyAlert({
+  HealthAlert({
+    required this.alertId,
     required this.type,
-    required this.title,
+    required this.elder,
     required this.message,
     required this.time,
     required this.severity,
+    required this.action,
   });
 }
 
@@ -110,7 +114,7 @@ class _HealthAlertsScreenState extends State<HealthAlertsScreen>
           ),
           tabs: const [
             Tab(text: '약물 복용'),
-            Tab(text: '긴급 알림'),
+            Tab(text: '건강 경고'),
             Tab(text: '건강 확인'),
           ],
         ),
@@ -119,7 +123,7 @@ class _HealthAlertsScreenState extends State<HealthAlertsScreen>
         controller: _tabController,
         children: [
           _buildMedicationTab(),
-          _buildEmergencyTab(),
+          _buildHealthAlertTab(),
           _buildHealthCheckTab(),
         ],
       ),
@@ -277,109 +281,249 @@ class _HealthAlertsScreenState extends State<HealthAlertsScreen>
     );
   }
 
-  Widget _buildEmergencyTab() {
-    final emergencies = <EmergencyAlert>[
-      EmergencyAlert(
-        type: '통화 연결 실패',
-        title: '통화 연결 안됨',
-        message: '김할머니와의 통화 연결이 실패했습니다.',
-        time: '오늘 14:30',
+  Widget _buildHealthAlertTab() {
+    final alerts = <HealthAlert>[
+      // 우울의심 (Depression Suspicion) - High severity
+      HealthAlert(
+        alertId: '1',
+        type: '우울의심',
+        elder: '이할아버지',
+        message:
+            '최근 3일간 대화 감정 분석 결과 부정적인 감정이 증가하고 있습니다. 우울증의 징후가 보입니다. 가족과의 대화를 늘리고 주의 깊은 관찰이 필요합니다.',
+        time: '오늘 11:30',
         severity: 'high',
+        action: '심리상담사 연결',
       ),
-      EmergencyAlert(
-        type: '우울도 급증',
-        title: '우울 수치 증가',
-        message: '최근 우울 수치가 급격히 증가했습니다. 주의 필요합니다.',
-        time: '어제 16:45',
+      HealthAlert(
+        alertId: '2',
+        type: '우울의심',
+        elder: '김할머니',
+        message:
+            '이번 주 통화 중 우울 지수가 평소보다 높아졌습니다. 건강한 활동과 사회적 상호작용을 권장합니다.',
+        time: '어제 15:45',
         severity: 'high',
+        action: '즉시 확인',
       ),
-      EmergencyAlert(
-        type: '건강 이상',
-        title: '비정상 수치 감지',
-        message: '혈압이 평상시보다 높게 측정되었습니다.',
-        time: '어제 11:20',
+      // 미응답 (No Response) - Medium severity
+      HealthAlert(
+        alertId: '3',
+        type: '미응답',
+        elder: '이할아버지',
+        message:
+            '예정된 건강 확인 통화에 응답하지 않았습니다. 14:00 예약된 통화에 미응답. 안부 확인이 필요합니다.',
+        time: '어제 14:15',
         severity: 'medium',
+        action: '재연락',
+      ),
+      HealthAlert(
+        alertId: '4',
+        type: '미응답',
+        elder: '김할머니',
+        message: '정기 약물 복용 확인 메시지에 응답이 없습니다. 약물 복용 여부를 확인해 주세요.',
+        time: '2024-12-13 09:30',
+        severity: 'medium',
+        action: '약물 복용 확인',
+      ),
+      // 정상완료 (Normal Completion) - Low severity
+      HealthAlert(
+        alertId: '5',
+        type: '정상완료',
+        elder: '김할머니',
+        message: '건강 확인이 완료되었습니다. 모든 건강 지표가 정상 범위입니다.',
+        time: '오늘 10:20',
+        severity: 'low',
+        action: '기록',
+      ),
+      HealthAlert(
+        alertId: '6',
+        type: '정상완료',
+        elder: '이할아버지',
+        message: '일일 약물 복용을 정상적으로 완료했습니다. 부작용 없음.',
+        time: '오늘 09:00',
+        severity: 'low',
+        action: '완료',
       ),
     ];
+
+    // 타입별로 그룹화
+    final depressionAlerts =
+        alerts.where((a) => a.type == '우울의심').toList();
+    final noResponseAlerts = alerts.where((a) => a.type == '미응답').toList();
+    final completedAlerts =
+        alerts.where((a) => a.type == '정상완료').toList();
 
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.all(20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: emergencies.map((alert) {
-            Color severityColor = alert.severity == 'high'
-                ? const Color(0xFFF44336)
-                : const Color(0xFFFFA726);
+          children: [
+            // 우울의심 섹션
+            _buildAlertSection(
+              title: '우울의심',
+              icon: Icons.sentiment_very_dissatisfied_rounded,
+              color: const Color(0xFFF44336),
+              alerts: depressionAlerts,
+            ),
+            const SizedBox(height: 20),
 
-            return Container(
-              margin: const EdgeInsets.only(bottom: 12),
-              decoration: BoxDecoration(
-                color: eCard,
-                border: Border.all(
-                  color: severityColor.withOpacity(0.3),
-                  width: 1.5,
-                ),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        alert.title,
-                        style: GoogleFonts.notoSansKr(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w700,
-                          color: eInk,
-                        ),
-                      ),
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 10,
-                          vertical: 4,
-                        ),
-                        decoration: BoxDecoration(
-                          color: severityColor.withOpacity(0.15),
-                          borderRadius: BorderRadius.circular(6),
-                        ),
-                        child: Text(
-                          alert.type,
-                          style: TextStyle(
-                            fontSize: 11,
-                            fontWeight: FontWeight.w600,
-                            color: severityColor,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    alert.message,
-                    style: const TextStyle(
-                      fontSize: 13,
-                      color: eInkSoft,
-                      height: 1.5,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    alert.time,
-                    style: const TextStyle(
-                      fontSize: 12,
-                      color: eInkSoft,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ],
-              ),
-            );
-          }).toList(),
+            // 미응답 섹션
+            _buildAlertSection(
+              title: '미응답',
+              icon: Icons.phone_missed_rounded,
+              color: const Color(0xFFFFA726),
+              alerts: noResponseAlerts,
+            ),
+            const SizedBox(height: 20),
+
+            // 정상완료 섹션
+            _buildAlertSection(
+              title: '정상완료',
+              icon: Icons.check_circle_rounded,
+              color: const Color(0xFF4CAF50),
+              alerts: completedAlerts,
+            ),
+          ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildAlertSection({
+    required String title,
+    required IconData icon,
+    required Color color,
+    required List<HealthAlert> alerts,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Icon(icon, color: color, size: 24),
+            const SizedBox(width: 12),
+            Text(
+              title,
+              style: GoogleFonts.notoSerifKr(
+                fontSize: 18,
+                fontWeight: FontWeight.w700,
+                color: eInk,
+              ),
+            ),
+            const SizedBox(width: 8),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+              decoration: BoxDecoration(
+                color: color.withOpacity(0.15),
+                borderRadius: BorderRadius.circular(6),
+              ),
+              child: Text(
+                '${alerts.length}건',
+                style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w600,
+                  color: color,
+                ),
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 12),
+        ...alerts.map((alert) => _buildAlertCard(alert, color)).toList(),
+      ],
+    );
+  }
+
+  Widget _buildAlertCard(HealthAlert alert, Color typeColor) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 12),
+      decoration: BoxDecoration(
+        color: eCard,
+        border: Border.all(
+          color: typeColor.withOpacity(0.3),
+          width: 1.5,
+        ),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      alert.elder,
+                      style: GoogleFonts.notoSansKr(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w700,
+                        color: eInk,
+                      ),
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      alert.time,
+                      style: const TextStyle(
+                        fontSize: 12,
+                        color: eInkSoft,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                decoration: BoxDecoration(
+                  color: typeColor.withOpacity(0.15),
+                  borderRadius: BorderRadius.circular(6),
+                ),
+                child: Text(
+                  alert.type,
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                    color: typeColor,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          Text(
+            alert.message,
+            style: const TextStyle(
+              fontSize: 13,
+              color: eInk,
+              height: 1.5,
+            ),
+          ),
+          const SizedBox(height: 12),
+          Row(
+            children: [
+              Icon(
+                Icons.lightbulb_outline_rounded,
+                size: 16,
+                color: typeColor,
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  '권고사항: ${alert.action}',
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                    color: typeColor,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
