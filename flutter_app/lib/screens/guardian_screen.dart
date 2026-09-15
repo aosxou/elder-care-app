@@ -5,6 +5,7 @@ import 'elderly_list_screen.dart';
 import 'health_alerts_screen.dart';
 import 'conversation_history_screen.dart';
 import 'elderly_detail_screen.dart';
+import 'guardian_account_screen.dart';
 
 // 색상
 const Color eBg = Color(0xFFFBF6ED);
@@ -95,15 +96,45 @@ class _GuardianScreenState extends State<GuardianScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // 인사말
-                Text(
-                  '보호자님\n안녕하세요',
-                  style: GoogleFonts.notoSerifKr(
-                    fontSize: 28,
-                    fontWeight: FontWeight.w700,
-                    color: eInk,
-                    height: 1.3,
-                  ),
+                // 헤더 (인사말 + 설정 버튼)
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      '보호자님\n안녕하세요',
+                      style: GoogleFonts.notoSerifKr(
+                        fontSize: 28,
+                        fontWeight: FontWeight.w700,
+                        color: eInk,
+                        height: 1.3,
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                const GuardianAccountScreen(),
+                          ),
+                        );
+                      },
+                      child: Container(
+                        width: 48,
+                        height: 48,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: eCard,
+                          border: Border.all(color: eLine),
+                        ),
+                        child: const Icon(
+                          Icons.settings_rounded,
+                          color: eAccent,
+                          size: 24,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
                 const SizedBox(height: 28),
 
