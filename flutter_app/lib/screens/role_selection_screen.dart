@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'elderly_home_page.dart';
-import 'guardian_home_page.dart';
+import 'elderly_login_screen.dart';
+import 'guardian_login_screen.dart';
 
 // 색상
 const Color eBg = Color(0xFFFBF6ED);
@@ -52,7 +52,7 @@ class RoleSelectionScreen extends StatelessWidget {
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const ElderlyHomePage(),
+                      builder: (context) => const ElderlyLoginScreen(),
                     ),
                   );
                 },
@@ -101,7 +101,7 @@ class RoleSelectionScreen extends StatelessWidget {
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const GuardianHomePage(),
+                      builder: (context) => const GuardianLoginScreen(),
                     ),
                   );
                 },
