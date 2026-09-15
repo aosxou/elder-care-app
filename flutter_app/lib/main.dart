@@ -4,7 +4,11 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'firebase_options.dart';
 import 'services/fcm_service.dart';
+import 'services/auth_service.dart';
 import 'screens/role_selection_screen.dart';
+import 'screens/elderly_login_screen.dart';
+import 'screens/elderly_home_page.dart';
+import 'screens/guardian_home_page.dart';
 
 // 어르신 앱 색상
 const Color eBg = Color(0xFFFBF6ED);
@@ -30,8 +34,36 @@ void main() async {
   runApp(const ElderCareApp());
 }
 
-class ElderCareApp extends StatelessWidget {
+class ElderCareApp extends StatefulWidget {
   const ElderCareApp({super.key});
+
+  @override
+  State<ElderCareApp> createState() => _ElderCareAppState();
+}
+
+class _ElderCareAppState extends State<ElderCareApp> {
+  late Future<Widget> _homeScreen;
+
+  @override
+  void initState() {
+    super.initState();
+    _homeScreen = _determineHomeScreen();
+  }
+
+  Future<Widget> _determineHomeScreen() async {
+    final isLoggedIn = await AuthService.isLoggedIn();
+    final userType = await AuthService.getUserType();
+
+    if (isLoggedIn && userType != null) {
+      if (userType == 'elderly') {
+        return const ElderlyHomePage();
+      } else if (userType == 'guardian') {
+        return const GuardianHomePage();
+      }
+    }
+
+    return const ElderlyLoginScreen();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +91,22 @@ class ElderCareApp extends StatelessWidget {
           ),
         ),
       ),
-      home: const RoleSelectionScreen(),
+      home: FutureBuilder<Widget>(
+        future: _homeScreen,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            return snapshot.data ?? const ElderlyLoginScreen();
+          }
+          return Scaffold(
+            backgroundColor: eBg,
+            body: Center(
+              child: CircularProgressIndicator(
+                valueColor: const AlwaysStoppedAnimation<Color>(eAccent),
+              ),
+            ),
+          );
+        },
+      ),
       debugShowCheckedModeBanner: false,
       localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,
