@@ -8,11 +8,22 @@
         Apache Cordova Team
     </author>
     <content src="index.html" />
-    <allow-intent href="*" />
+
     <access origin="*" />
     <allow-navigation href="*" />
-<!--
+    <platform name="android">
+        <preference name="usesCleartextTraffic" value="true" />
+    </platform>
+    <preference name="AndroidInsecureFileModeEnabled" value="true" />
+
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
--->
+
+    <edit-config
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            file="app/src/main/AndroidManifest.xml"
+            mode="merge"
+            target="/manifest/application">
+        <application android:usesCleartextTraffic="true" />
+    </edit-config>
 </widget>

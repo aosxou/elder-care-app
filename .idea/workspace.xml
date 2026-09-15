@@ -5,13 +5,21 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="bf64dadc-f72d-419c-9582-92f5e90e1576" name="변경" comment="">
-      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/eldercare/backend/config/WebSocketConfig.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/eldercare/backend/controller/ChatController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/eldercare/backend/dto/ChatMessage.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/src/main/resources/static/index.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/backend/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/eldercare/backend/BackendApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/eldercare/backend/BackendApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/eldercare/backend/HelloController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/eldercare/backend/HelloController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/eldercare/backend/config/FirebaseConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/eldercare/backend/config/FirebaseConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/eldercare/backend/config/WebSocketConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/eldercare/backend/config/WebSocketConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/eldercare/backend/controller/FCMController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/eldercare/backend/controller/FCMController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/eldercare/backend/service/FCMService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/eldercare/backend/service/FCMService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/eldercare/backend/service/GeminiService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/eldercare/backend/service/GeminiService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/application.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/resources/application.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/static/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/resources/static/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mobile/.idea/caches/deviceStreaming.xml" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/.idea/caches/deviceStreaming.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mobile/config.xml" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/config.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mobile/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mobile/www/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/www/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mobile/www/js/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/www/js/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mobile/www/main.html" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/www/main.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -38,6 +46,13 @@
       </state>
     </system>
   </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="HTML File" />
+      </list>
+    </option>
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
@@ -53,6 +68,7 @@
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
     &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
     &quot;Gradle.backend [bootRun].executor&quot;: &quot;Run&quot;,
     &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
