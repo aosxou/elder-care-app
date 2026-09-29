@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'calling_screen.dart';
 import 'ai_chat_screen.dart';
+import 'emergency_screen.dart';
 
 // 색상
 const Color eBg = Color(0xFFFBF6ED);
@@ -24,11 +26,125 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   late String _currentTime;
+  String _friendName = 'AI 친구';
 
   @override
   void initState() {
     super.initState();
     _updateTime();
+    _loadFriendName();
+  }
+
+  Future<void> _loadFriendName() async {
+    final prefs = await SharedPreferences.getInstance();
+    final savedName = prefs.getString('ai_friend_name');
+
+    if (savedName == null) {
+      // 친구 이름이 설정되지 않았으면 다이얼로그 표시
+      if (mounted) {
+        _showSetFriendNameDialog();
+      }
+    } else {
+      setState(() {
+        _friendName = savedName;
+      });
+    }
+  }
+
+  void _showSetFriendNameDialog() {
+    final nameController = TextEditingController();
+
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => AlertDialog(
+        backgroundColor: eCard,
+        title: Text(
+          'AI 친구 이름 설정',
+          style: GoogleFonts.notoSerifKr(
+            fontSize: 20,
+            fontWeight: FontWeight.w700,
+            color: eInk,
+          ),
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              '함께할 AI 친구의 이름을 지어주세요!\n(5자 이내)',
+              style: GoogleFonts.notoSansKr(
+                fontSize: 14,
+                color: eInkSoft,
+                height: 1.5,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 16),
+            TextField(
+              controller: nameController,
+              maxLength: 5,
+              textAlign: TextAlign.center,
+              decoration: InputDecoration(
+                hintText: '예: 루나, 친구, 봉봉',
+                hintStyle: const TextStyle(color: eInkSoft),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: const BorderSide(color: eLine),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: const BorderSide(color: eAccent, width: 2),
+                ),
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 14,
+                  vertical: 12,
+                ),
+              ),
+              style: GoogleFonts.notoSansKr(
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ],
+        ),
+        actions: [
+          SizedBox(
+            width: double.infinity,
+            child: ElevatedButton(
+              onPressed: () async {
+                if (nameController.text.isNotEmpty) {
+                  final prefs = await SharedPreferences.getInstance();
+                  await prefs.setString('ai_friend_name', nameController.text);
+
+                  setState(() {
+                    _friendName = nameController.text;
+                  });
+
+                  if (mounted) {
+                    Navigator.pop(context);
+                  }
+                }
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: eAccent,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                padding: const EdgeInsets.symmetric(vertical: 12),
+              ),
+              child: Text(
+                '설정 완료',
+                style: GoogleFonts.notoSansKr(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   void _updateTime() {
@@ -40,12 +156,15 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
       backgroundColor: eBg,
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 26, vertical: 46),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
@@ -54,68 +173,76 @@ class _MainScreenState extends State<MainScreen> {
                   '오늘도\n평안한 하루\n보내세요',
                   textAlign: TextAlign.center,
                   style: GoogleFonts.notoSerifKr(
-                    fontSize: 27,
+                    fontSize: 32,
                     fontWeight: FontWeight.w700,
                     color: eInk,
                     height: 1.4,
                   ),
                 ),
-                const SizedBox(height: 38),
+                const SizedBox(height: 28),
 
-                // 다이얼 버튼
+                // 다이얼 버튼 - 크기 증가
                 GestureDetector(
                   onTap: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const CallingScreen(
-                          callerName: 'AI 친구',
+                        builder: (context) => CallingScreen(
+                          callerName: _friendName,
                         ),
                       ),
                     );
                   },
                   child: Container(
-                    width: 240,
-                    height: 240,
-                    margin: const EdgeInsets.only(bottom: 16),
+                    width: screenWidth * 0.65,
+                    height: screenWidth * 0.65,
+                    margin: const EdgeInsets.only(bottom: 12),
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       gradient: RadialGradient(
                         center: Alignment.center,
                         radius: 1.0,
                         colors: [
-                          const Color(0xFFD97B4F).withOpacity(0.75),
-                          const Color(0xFFD97B4F).withOpacity(0.45),
-                          const Color(0xFFD97B4F).withOpacity(0.18),
-                          const Color(0xFFD97B4F).withOpacity(0.05),
+                          const Color(0xFFF4A574),
+                          const Color(0xFFF4A574).withOpacity(0.75),
+                          const Color(0xFFF4A574).withOpacity(0.45),
+                          const Color(0xFFF4A574).withOpacity(0.15),
                           Colors.transparent,
                         ],
                         stops: const [0.0, 0.28, 0.50, 0.68, 0.82],
                       ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: const Color(0xFFF4A574).withOpacity(0.4),
+                          blurRadius: 24,
+                          spreadRadius: 8,
+                        ),
+                      ],
                     ),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Icon(
                           Icons.phone_rounded,
-                          size: 38,
-                          color: const Color(0xFF8B4A2A),
+                          size: 52,
+                          color: const Color(0xFF7B4020),
                         ),
-                        const SizedBox(height: 10),
+                        const SizedBox(height: 12),
                         Text(
-                          'AI 친구',
+                          '$_friendName과 통화하기',
                           style: GoogleFonts.notoSerifKr(
-                            fontSize: 22,
-                            fontWeight: FontWeight.w700,
-                            color: const Color(0xFF8B4A2A),
+                            fontSize: 28,
+                            fontWeight: FontWeight.w800,
+                            color: const Color(0xFF7B4020),
                           ),
                         ),
-                        const SizedBox(height: 4),
+                        const SizedBox(height: 6),
                         Text(
-                          '눌러서 통화하기',
-                          style: TextStyle(
-                            fontSize: 13,
-                            color: const Color(0xFF8B4A2A).withOpacity(0.7),
+                          '편하게 누르세요',
+                          style: GoogleFonts.notoSansKr(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                            color: const Color(0xFF7B4020).withOpacity(0.8),
                           ),
                         ),
                       ],
@@ -123,9 +250,9 @@ class _MainScreenState extends State<MainScreen> {
                   ),
                 ),
 
-                const SizedBox(height: 30),
+                const SizedBox(height: 24),
 
-                // 메뉴 카드
+                // 메뉴 카드 - 크기 증가
                 _buildMenuCard(
                   title: 'AI 채팅',
                   description: '글로 편하게 이야기해요',
@@ -141,7 +268,7 @@ class _MainScreenState extends State<MainScreen> {
                     );
                   },
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: 18),
 
                 _buildMenuCard(
                   title: '비상 연락',
@@ -150,7 +277,12 @@ class _MainScreenState extends State<MainScreen> {
                   iconColor: eAccent,
                   icon: Icons.warning_amber_rounded,
                   onTap: () {
-                    // 비상 연락 화면으로 이동
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const EmergencyScreen(),
+                      ),
+                    );
                   },
                 ),
               ],
@@ -174,26 +306,33 @@ class _MainScreenState extends State<MainScreen> {
       child: Container(
         decoration: BoxDecoration(
           color: eCard,
-          border: Border.all(color: eLine, width: 1),
-          borderRadius: BorderRadius.circular(18),
+          border: Border.all(color: eLine, width: 2),
+          borderRadius: BorderRadius.circular(22),
+          boxShadow: [
+            BoxShadow(
+              color: eInk.withOpacity(0.08),
+              blurRadius: 8,
+              spreadRadius: 2,
+            ),
+          ],
         ),
-        padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 22),
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 28),
         child: Row(
           children: [
             Container(
-              width: 60,
-              height: 60,
+              width: 76,
+              height: 76,
               decoration: BoxDecoration(
                 color: backgroundColor,
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: BorderRadius.circular(18),
               ),
               child: Icon(
                 icon,
                 color: iconColor,
-                size: 28,
+                size: 36,
               ),
             ),
-            const SizedBox(width: 18),
+            const SizedBox(width: 20),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -201,16 +340,18 @@ class _MainScreenState extends State<MainScreen> {
                   Text(
                     title,
                     style: GoogleFonts.notoSansKr(
-                      fontSize: 22,
-                      fontWeight: FontWeight.w800,
+                      fontSize: 26,
+                      fontWeight: FontWeight.w900,
                       color: eInk,
+                      letterSpacing: 0.5,
                     ),
                   ),
-                  const SizedBox(height: 3),
+                  const SizedBox(height: 6),
                   Text(
                     description,
-                    style: TextStyle(
-                      fontSize: 15,
+                    style: GoogleFonts.notoSansKr(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
                       color: eInkSoft,
                     ),
                   ),
@@ -220,8 +361,9 @@ class _MainScreenState extends State<MainScreen> {
             Text(
               '›',
               style: TextStyle(
-                fontSize: 24,
-                color: eInkSoft,
+                fontSize: 32,
+                fontWeight: FontWeight.bold,
+                color: eAccent,
               ),
             ),
           ],

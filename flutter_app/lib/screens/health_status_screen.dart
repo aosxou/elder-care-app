@@ -21,7 +21,7 @@ class HealthStatusScreen extends StatelessWidget {
         title: Text(
           '건강 현황',
           style: GoogleFonts.notoSerifKr(
-            fontSize: 24,
+            fontSize: 28,
             fontWeight: FontWeight.w700,
             color: eInk,
           ),
@@ -41,7 +41,7 @@ class HealthStatusScreen extends StatelessWidget {
               Text(
                 '실시간 건강 지표',
                 style: GoogleFonts.notoSerifKr(
-                  fontSize: 18,
+                  fontSize: 22,
                   fontWeight: FontWeight.w700,
                   color: eInk,
                 ),
@@ -89,7 +89,7 @@ class HealthStatusScreen extends StatelessWidget {
               Text(
                 '일일 활동',
                 style: GoogleFonts.notoSerifKr(
-                  fontSize: 18,
+                  fontSize: 22,
                   fontWeight: FontWeight.w700,
                   color: eInk,
                 ),
@@ -111,7 +111,7 @@ class HealthStatusScreen extends StatelessWidget {
                         Text(
                           '걸음수',
                           style: GoogleFonts.notoSansKr(
-                            fontSize: 16,
+                            fontSize: 20,
                             fontWeight: FontWeight.w700,
                             color: eInk,
                           ),
@@ -119,7 +119,7 @@ class HealthStatusScreen extends StatelessWidget {
                         Text(
                           '7,245 / 10,000',
                           style: TextStyle(
-                            fontSize: 16,
+                            fontSize: 20,
                             fontWeight: FontWeight.w700,
                             color: eAccent,
                           ),
@@ -156,7 +156,7 @@ class HealthStatusScreen extends StatelessWidget {
                         Text(
                           '수면시간',
                           style: GoogleFonts.notoSansKr(
-                            fontSize: 16,
+                            fontSize: 20,
                             fontWeight: FontWeight.w700,
                             color: eInk,
                           ),
@@ -164,7 +164,7 @@ class HealthStatusScreen extends StatelessWidget {
                         Text(
                           '7.5시간',
                           style: TextStyle(
-                            fontSize: 16,
+                            fontSize: 20,
                             fontWeight: FontWeight.w700,
                             color: const Color(0xFF2196F3),
                           ),
@@ -190,7 +190,7 @@ class HealthStatusScreen extends StatelessWidget {
               Text(
                 '약물 복용 일정',
                 style: GoogleFonts.notoSerifKr(
-                  fontSize: 18,
+                  fontSize: 22,
                   fontWeight: FontWeight.w700,
                   color: eInk,
                 ),
@@ -256,7 +256,7 @@ class HealthStatusScreen extends StatelessWidget {
               Text(
                 title,
                 style: GoogleFonts.notoSansKr(
-                  fontSize: 14,
+                  fontSize: 18,
                   fontWeight: FontWeight.w600,
                   color: eInkSoft,
                 ),
@@ -267,7 +267,7 @@ class HealthStatusScreen extends StatelessWidget {
                   Text(
                     value,
                     style: GoogleFonts.notoSansKr(
-                      fontSize: 24,
+                      fontSize: 28,
                       fontWeight: FontWeight.w700,
                       color: eInk,
                     ),
@@ -276,7 +276,7 @@ class HealthStatusScreen extends StatelessWidget {
                   Text(
                     unit,
                     style: TextStyle(
-                      fontSize: 12,
+                      fontSize: 16,
                       color: eInkSoft,
                       fontWeight: FontWeight.w600,
                     ),
@@ -294,7 +294,7 @@ class HealthStatusScreen extends StatelessWidget {
             child: Text(
               status,
               style: TextStyle(
-                fontSize: 12,
+                fontSize: 16,
                 fontWeight: FontWeight.w600,
                 color: color,
               ),
@@ -320,7 +320,7 @@ class HealthStatusScreen extends StatelessWidget {
               Text(
                 name,
                 style: GoogleFonts.notoSansKr(
-                  fontSize: 14,
+                  fontSize: 18,
                   fontWeight: FontWeight.w600,
                   color: eInk,
                 ),
@@ -329,7 +329,7 @@ class HealthStatusScreen extends StatelessWidget {
               Text(
                 time,
                 style: const TextStyle(
-                  fontSize: 12,
+                  fontSize: 16,
                   color: eInkSoft,
                 ),
               ),

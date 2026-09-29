@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'conversation_detail_page.dart';
 
 const Color eBg = Color(0xFFFBF6ED);
 const Color eCard = Color(0xFFFFFDF8);
@@ -43,16 +44,19 @@ class _ElderlyDetailScreenState extends State<ElderlyDetailScreen> {
           'time': '09:30',
           'content': '오늘 날씨가 정말 좋네요',
           'sentiment': '긍정적',
+          'aiResponse': '정말 그렇네요! 이렇게 좋은 날씨에는 밖에서 활동하는 것이 건강에 정말 좋습니다.',
         },
         {
           'time': '14:15',
           'content': '손주가 만났다고 얘기해주면 좋겠어요',
           'sentiment': '중립적',
+          'aiResponse': '가족과의 시간은 정말 소중하지요. 즐거운 대화가 되시기를 바랍니다.',
         },
         {
           'time': '18:45',
           'content': 'AI 친구와 통화했습니다',
           'sentiment': '긍정적',
+          'aiResponse': '오늘 하루 정말 활동적이셨네요. 건강한 생활을 축하드립니다!',
         },
       ],
     },
@@ -72,11 +76,13 @@ class _ElderlyDetailScreenState extends State<ElderlyDetailScreen> {
           'time': '10:15',
           'content': '좀 피곤해요',
           'sentiment': '중립적',
+          'aiResponse': '충분한 휴식이 필요할 것 같네요. 천천히 쉬시고 가벼운 활동부터 시작해보세요.',
         },
         {
           'time': '16:30',
           'content': '산책하고 기분이 좋아졌어요',
           'sentiment': '긍정적',
+          'aiResponse': '산책은 정말 마음을 편하게 해주는 좋은 활동이네요. 계속 이렇게 활동해주세요!',
         },
       ],
     },
@@ -300,13 +306,50 @@ class _ElderlyDetailScreenState extends State<ElderlyDetailScreen> {
               const SizedBox(height: 24),
 
               // 대화 내용
-              Text(
-                '시간별 대화 기록',
-                style: GoogleFonts.notoSerifKr(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w700,
-                  color: eInk,
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    '시간별 대화 기록',
+                    style: GoogleFonts.notoSerifKr(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w700,
+                      color: eInk,
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              ConversationDetailPage(
+                                elderlyId: widget.elderlyId,
+                                elderlyName: widget.elderlyName,
+                              ),
+                        ),
+                      );
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 14,
+                        vertical: 8,
+                      ),
+                      decoration: BoxDecoration(
+                        color: eAccent,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Text(
+                        '상세보기',
+                        style: GoogleFonts.notoSansKr(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
               const SizedBox(height: 12),
               Container(
@@ -327,6 +370,7 @@ class _ElderlyDetailScreenState extends State<ElderlyDetailScreen> {
                             time: conversations[index]['time']!,
                             content: conversations[index]['content']!,
                             sentiment: conversations[index]['sentiment']!,
+                            aiResponse: conversations[index]['aiResponse'] as String?,
                           ),
                           if (index < conversations.length - 1)
                             const SizedBox(height: 12),
@@ -461,6 +505,7 @@ class _ElderlyDetailScreenState extends State<ElderlyDetailScreen> {
     required String time,
     required String content,
     required String sentiment,
+    String? aiResponse,
   }) {
     Color sentimentColor = sentiment == '긍정적'
         ? const Color(0xFF4CAF50)
@@ -484,29 +529,63 @@ class _ElderlyDetailScreenState extends State<ElderlyDetailScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                content,
-                style: const TextStyle(
-                  fontSize: 13,
-                  color: eInk,
+              // 어르신 발언
+              Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  border: Border.all(color: eLine),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      '어르신: $content',
+                      style: const TextStyle(
+                        fontSize: 13,
+                        color: eInk,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    const SizedBox(height: 6),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                      decoration: BoxDecoration(
+                        color: sentimentColor.withOpacity(0.15),
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                      child: Text(
+                        sentiment,
+                        style: TextStyle(
+                          fontSize: 11,
+                          color: sentimentColor,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
-              const SizedBox(height: 4),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                decoration: BoxDecoration(
-                  color: sentimentColor.withOpacity(0.15),
-                  borderRadius: BorderRadius.circular(4),
-                ),
-                child: Text(
-                  sentiment,
-                  style: TextStyle(
-                    fontSize: 11,
-                    color: sentimentColor,
-                    fontWeight: FontWeight.w600,
+              const SizedBox(height: 8),
+              // AI 응답
+              if (aiResponse != null)
+                Container(
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFFBE4D3),
+                    border: Border.all(color: eLine),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Text(
+                    'AI 친구: $aiResponse',
+                    style: const TextStyle(
+                      fontSize: 13,
+                      color: Color(0xFF8B4A2A),
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
                 ),
-              ),
             ],
           ),
         ),

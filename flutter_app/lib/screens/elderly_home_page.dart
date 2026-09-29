@@ -3,8 +3,6 @@ import 'package:google_fonts/google_fonts.dart';
 import '../services/auth_service.dart';
 import 'elderly_login_screen.dart';
 import 'main_screen.dart';
-import 'ai_chat_screen.dart';
-import 'emergency_screen.dart';
 
 const Color eBg = Color(0xFFFBF6ED);
 const Color eCard = Color(0xFFFFFDF8);
@@ -20,14 +18,6 @@ class ElderlyHomePage extends StatefulWidget {
 }
 
 class _ElderlyHomePageState extends State<ElderlyHomePage> {
-  int _selectedIndex = 0;
-
-  final List<Widget> _screens = [
-    const MainScreen(),
-    const AiChatScreen(),
-    const EmergencyScreen(),
-  ];
-
   void _logout() async {
     await AuthService.logout();
     if (!mounted) return;
@@ -93,33 +83,7 @@ class _ElderlyHomePageState extends State<ElderlyHomePage> {
           ),
         ],
       ),
-      body: _screens[_selectedIndex],
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _selectedIndex,
-        onTap: (index) {
-          setState(() {
-            _selectedIndex = index;
-          });
-        },
-        backgroundColor: eCard,
-        selectedItemColor: eAccent,
-        unselectedItemColor: eInkSoft,
-        type: BottomNavigationBarType.fixed,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home_rounded),
-            label: '홈',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.chat_bubble_outline_rounded),
-            label: '채팅',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.shield_outlined),
-            label: '비상연락',
-          ),
-        ],
-      ),
+      body: const MainScreen(),
     );
   }
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../services/auth_service.dart';
 import 'role_selection_screen.dart';
+import 'elderly_management_screen.dart';
 
 const Color eBg = Color(0xFFFBF6ED);
 const Color eCard = Color(0xFFFFFDF8);
@@ -290,13 +291,46 @@ class _GuardianAccountScreenState extends State<GuardianAccountScreen> {
               const SizedBox(height: 28),
 
               // 관리 중인 어르신
-              Text(
-                '관리 중인 어르신',
-                style: GoogleFonts.notoSerifKr(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w700,
-                  color: eInk,
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    '관리 중인 어르신',
+                    style: GoogleFonts.notoSerifKr(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                      color: eInk,
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const ElderlyManagementScreen(),
+                        ),
+                      );
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 6,
+                      ),
+                      decoration: BoxDecoration(
+                        color: eAccent,
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                      child: Text(
+                        '수정',
+                        style: GoogleFonts.notoSansKr(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
               const SizedBox(height: 12),
               Container(

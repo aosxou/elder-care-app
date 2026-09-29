@@ -62,7 +62,8 @@ class _ElderCareAppState extends State<ElderCareApp> {
       }
     }
 
-    return const ElderlyLoginScreen();
+    // 로그인되지 않았으면 역할 선택 화면으로
+    return const RoleSelectionScreen();
   }
 
   @override

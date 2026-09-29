@@ -103,7 +103,7 @@ class _GuardianScreenState extends State<GuardianScreen> {
                     Text(
                       '보호자님\n안녕하세요',
                       style: GoogleFonts.notoSerifKr(
-                        fontSize: 28,
+                        fontSize: 36,
                         fontWeight: FontWeight.w700,
                         color: eInk,
                         height: 1.3,
@@ -142,7 +142,7 @@ class _GuardianScreenState extends State<GuardianScreen> {
                 Text(
                   '관리 중인 어르신',
                   style: GoogleFonts.notoSerifKr(
-                    fontSize: 16,
+                    fontSize: 22,
                     fontWeight: FontWeight.w700,
                     color: eInk,
                   ),
@@ -155,7 +155,7 @@ class _GuardianScreenState extends State<GuardianScreen> {
                 Text(
                   '이번 달 통계',
                   style: GoogleFonts.notoSerifKr(
-                    fontSize: 16,
+                    fontSize: 22,
                     fontWeight: FontWeight.w700,
                     color: eInk,
                   ),
@@ -197,7 +197,7 @@ class _GuardianScreenState extends State<GuardianScreen> {
                 Text(
                   '최근 7일 감정 추이',
                   style: GoogleFonts.notoSerifKr(
-                    fontSize: 16,
+                    fontSize: 22,
                     fontWeight: FontWeight.w700,
                     color: eInk,
                   ),
@@ -213,7 +213,7 @@ class _GuardianScreenState extends State<GuardianScreen> {
                     Text(
                       '최근 알림',
                       style: GoogleFonts.notoSerifKr(
-                        fontSize: 16,
+                        fontSize: 22,
                         fontWeight: FontWeight.w700,
                         color: eInk,
                       ),
@@ -230,7 +230,7 @@ class _GuardianScreenState extends State<GuardianScreen> {
                       child: Text(
                         '전체보기',
                         style: GoogleFonts.notoSansKr(
-                          fontSize: 12,
+                          fontSize: 16,
                           fontWeight: FontWeight.w600,
                           color: eAccent,
                         ),
@@ -241,42 +241,6 @@ class _GuardianScreenState extends State<GuardianScreen> {
                 const SizedBox(height: 12),
                 ..._alerts.take(2).map((alert) => _buildAlertItem(alert)),
                 const SizedBox(height: 20),
-
-                // 빠른 메뉴
-                Row(
-                  children: [
-                    Expanded(
-                      child: _buildQuickMenu(
-                        title: '어르신 관리',
-                        icon: Icons.people_outline_rounded,
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const ElderlyListScreen(),
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: _buildQuickMenu(
-                        title: '대화 기록',
-                        icon: Icons.chat_bubble_outline_rounded,
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  const ConversationHistoryScreen(),
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                  ],
-                ),
               ],
             ),
           ),
@@ -335,7 +299,7 @@ class _GuardianScreenState extends State<GuardianScreen> {
                       Text(
                         elder['name'],
                         style: GoogleFonts.notoSansKr(
-                          fontSize: 15,
+                          fontSize: 20,
                           fontWeight: FontWeight.w700,
                           color: eInk,
                         ),
@@ -355,7 +319,7 @@ class _GuardianScreenState extends State<GuardianScreen> {
                         child: Text(
                           elder['hasTalked'] ? '완료' : '미완료',
                           style: const TextStyle(
-                            fontSize: 10,
+                            fontSize: 14,
                             fontWeight: FontWeight.w600,
                             color: Colors.white,
                           ),
@@ -367,7 +331,7 @@ class _GuardianScreenState extends State<GuardianScreen> {
                   Text(
                     '마지막 통화: ${elder['lastTalk']}',
                     style: const TextStyle(
-                      fontSize: 12,
+                      fontSize: 16,
                       color: eInkSoft,
                     ),
                   ),
@@ -403,7 +367,7 @@ class _GuardianScreenState extends State<GuardianScreen> {
           Text(
             title,
             style: const TextStyle(
-              fontSize: 11,
+              fontSize: 15,
               color: eInkSoft,
               fontWeight: FontWeight.w600,
             ),
@@ -412,7 +376,7 @@ class _GuardianScreenState extends State<GuardianScreen> {
           Text(
             value,
             style: GoogleFonts.notoSansKr(
-              fontSize: 18,
+              fontSize: 24,
               fontWeight: FontWeight.w700,
               color: color,
             ),
@@ -421,7 +385,7 @@ class _GuardianScreenState extends State<GuardianScreen> {
           Text(
             subtitle,
             style: const TextStyle(
-              fontSize: 11,
+              fontSize: 15,
               color: eInkSoft,
             ),
           ),
@@ -459,7 +423,7 @@ class _GuardianScreenState extends State<GuardianScreen> {
                     style: const TextStyle(
                       color: eInkSoft,
                       fontWeight: FontWeight.w500,
-                      fontSize: 10,
+                      fontSize: 14,
                     ),
                   );
                 },
@@ -475,7 +439,7 @@ class _GuardianScreenState extends State<GuardianScreen> {
                     style: const TextStyle(
                       color: eInkSoft,
                       fontWeight: FontWeight.w500,
-                      fontSize: 10,
+                      fontSize: 14,
                     ),
                   );
                 },
@@ -485,12 +449,6 @@ class _GuardianScreenState extends State<GuardianScreen> {
           gridData: FlGridData(
             show: true,
             drawVerticalLine: false,
-            getDrawingHorizontalGridLine: (value) {
-              return FlLine(
-                color: eLine.withOpacity(0.3),
-                strokeWidth: 0.5,
-              );
-            },
           ),
           borderData: FlBorderData(show: false),
           barGroups: List.generate(
@@ -556,7 +514,7 @@ class _GuardianScreenState extends State<GuardianScreen> {
                 Text(
                   '${alert['elder']} - $typeLabel',
                   style: GoogleFonts.notoSansKr(
-                    fontSize: 13,
+                    fontSize: 18,
                     fontWeight: FontWeight.w600,
                     color: eInk,
                   ),
@@ -565,7 +523,7 @@ class _GuardianScreenState extends State<GuardianScreen> {
                 Text(
                   alert['time'],
                   style: const TextStyle(
-                    fontSize: 11,
+                    fontSize: 15,
                     color: eInkSoft,
                   ),
                 ),
@@ -603,7 +561,7 @@ class _GuardianScreenState extends State<GuardianScreen> {
             Text(
               title,
               style: GoogleFonts.notoSansKr(
-                fontSize: 12,
+                fontSize: 16,
                 fontWeight: FontWeight.w600,
                 color: eInk,
               ),

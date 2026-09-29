@@ -381,15 +381,27 @@
                 </div>
                 <div class="menu-card__label">AI 채팅</div>
             </div>
-            <div class="glass-card menu-card" onclick="showScreen('historyScreen')">
-                <div class="menu-card__icon">
-                    <!-- 시계 -->
-                    <svg viewBox="0 0 24 24" fill="none" stroke="#F472B6" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="12" cy="12" r="10"/>
-                        <polyline points="12 6 12 12 16 14"/>
+            <div class="glass-card menu-card" onclick="showScreen('emergencyScreen')">
+                <div class="menu-card__icon sos">
+                    <!-- 경고 벨 -->
+                    <svg viewBox="0 0 24 24" fill="none" stroke="#FF8A8A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+                        <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
                     </svg>
                 </div>
-                <div class="menu-card__label">통화 기록</div>
+                <div class="menu-card__label">비상 연락</div>
+            </div>
+        </div>
+
+        <div class="menu-grid">
+            <div class="glass-card menu-card" onclick="showScreen('chatScreen')">
+                <div class="menu-card__icon">
+                    <!-- 메시지 버블 -->
+                    <svg viewBox="0 0 24 24" fill="none" stroke="#F472B6" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                    </svg>
+                </div>
+                <div class="menu-card__label">AI 채팅</div>
             </div>
             <div class="glass-card menu-card" onclick="showScreen('emergencyScreen')">
                 <div class="menu-card__icon sos">

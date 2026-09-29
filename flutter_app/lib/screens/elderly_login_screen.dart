@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import '../services/auth_service.dart';
 import 'elderly_signup_screen.dart';
 import 'elderly_home_page.dart';
+import 'role_selection_screen.dart';
 
 const Color eBg = Color(0xFFFBF6ED);
 const Color eCard = Color(0xFFFFFDF8);
@@ -85,6 +86,54 @@ class _ElderlyLoginScreenState extends State<ElderlyLoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: eBg,
+      appBar: AppBar(
+        backgroundColor: eBg,
+        elevation: 0,
+        leading: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: IconButton(
+            icon: Container(
+              width: 44,
+              height: 44,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.white,
+                border: Border.all(color: eLine, width: 2),
+                boxShadow: [
+                  BoxShadow(
+                    color: eInk.withOpacity(0.1),
+                    blurRadius: 6,
+                    spreadRadius: 1,
+                  ),
+                ],
+              ),
+              child: const Icon(Icons.chevron_left, color: eInk, size: 24),
+            ),
+            onPressed: () {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const RoleSelectionScreen(),
+                ),
+              );
+            },
+            padding: EdgeInsets.zero,
+            constraints: const BoxConstraints(
+              minWidth: 44,
+              minHeight: 44,
+            ),
+          ),
+        ),
+        title: Text(
+          '어르신 로그인',
+          style: GoogleFonts.notoSerifKr(
+            fontSize: 21,
+            fontWeight: FontWeight.w700,
+            color: eInk,
+          ),
+        ),
+        centerTitle: false,
+      ),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
