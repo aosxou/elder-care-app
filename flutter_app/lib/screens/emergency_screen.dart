@@ -9,8 +9,49 @@ const Color eLine = Color(0xFFEADFC9);
 const Color eAccent = Color(0xFFD97B4F);
 const Color eAccentSoft = Color(0xFFFBE4D3);
 
-class EmergencyScreen extends StatelessWidget {
+class EmergencyScreen extends StatefulWidget {
   const EmergencyScreen({super.key});
+
+  @override
+  State<EmergencyScreen> createState() => _EmergencyScreenState();
+}
+
+class _EmergencyScreenState extends State<EmergencyScreen> {
+  final List<Map<String, String>> contacts = [
+    {
+      'name': '김보호 (딸)',
+      'relation': '보호자',
+      'number': '010-1234-5678',
+    },
+    {
+      'name': '이효준 (아들)',
+      'relation': '보호자',
+      'number': '010-2345-6789',
+    },
+    {
+      'name': '박은숙 (며느리)',
+      'relation': '보호자',
+      'number': '010-3456-7890',
+    },
+  ];
+
+  final List<Map<String, String>> otherContacts = [
+    {
+      'name': '은평구청',
+      'relation': '복지담당',
+      'number': '02-351-4114',
+    },
+    {
+      'name': '김영희 요양보호사',
+      'relation': '돌봄 담당',
+      'number': '010-9876-5432',
+    },
+    {
+      'name': '서울의료원',
+      'relation': '병원',
+      'number': '02-2276-8114',
+    },
+  ];
 
   void _handleEmergencyCall(BuildContext context, String name, String number) {
     showDialog(
@@ -55,6 +96,103 @@ class EmergencyScreen extends StatelessWidget {
                 fontSize: 18,
                 color: Colors.white,
               ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showAddContactDialog(BuildContext context) {
+    final nameController = TextEditingController();
+    final relationController = TextEditingController();
+    final numberController = TextEditingController();
+
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(
+          '연락처 추가',
+          style: GoogleFonts.notoSansKr(
+            fontSize: 22,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+        content: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextField(
+                controller: nameController,
+                decoration: InputDecoration(
+                  hintText: '이름',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 12),
+              TextField(
+                controller: relationController,
+                decoration: InputDecoration(
+                  hintText: '관계 (예: 딸, 아들)',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 12),
+              TextField(
+                controller: numberController,
+                decoration: InputDecoration(
+                  hintText: '전화번호',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('취소'),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              if (nameController.text.isNotEmpty &&
+                  relationController.text.isNotEmpty &&
+                  numberController.text.isNotEmpty) {
+                setState(() {
+                  contacts.add({
+                    'name': nameController.text,
+                    'relation': relationController.text,
+                    'number': numberController.text,
+                  });
+                });
+                Navigator.pop(context);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('${nameController.text} 연락처가 추가되었습니다.'),
+                    duration: const Duration(seconds: 2),
+                  ),
+                );
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('모든 항목을 입력해주세요.'),
+                    duration: const Duration(seconds: 2),
+                  ),
+                );
+              }
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: const Color(0xFFC0553F),
+            ),
+            child: const Text(
+              '추가',
+              style: TextStyle(color: Colors.white),
             ),
           ),
         ],
@@ -178,44 +316,61 @@ class EmergencyScreen extends StatelessWidget {
               const SizedBox(height: 28),
 
               // 가족 연락처
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  '가족 연락처',
-                  style: GoogleFonts.notoSansKr(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w700,
-                    color: eInk,
-                    letterSpacing: 0.5,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    '가족 연락처',
+                    style: GoogleFonts.notoSansKr(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w700,
+                      color: eInk,
+                      letterSpacing: 0.5,
+                    ),
                   ),
-                ),
+                  GestureDetector(
+                    onTap: () => _showAddContactDialog(context),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: const Color(0xFFC0553F),
+                      ),
+                      padding: const EdgeInsets.all(8),
+                      child: const Icon(
+                        Icons.add,
+                        color: Colors.white,
+                        size: 20,
+                      ),
+                    ),
+                  ),
+                ],
               ),
               const SizedBox(height: 12),
-              _buildContactButton(
-                context,
-                '김보호 (딸)',
-                '보호자',
-                '010-1234-5678',
-                const Color(0xFFE5F3EA),
-                const Color(0xFF2E8F5E),
-              ),
-              const SizedBox(height: 10),
-              _buildContactButton(
-                context,
-                '이효준 (아들)',
-                '보호자',
-                '010-2345-6789',
-                const Color(0xFFE1E9F7),
-                const Color(0xFF1F5C56),
-              ),
-              const SizedBox(height: 10),
-              _buildContactButton(
-                context,
-                '박은숙 (며느리)',
-                '보호자',
-                '010-3456-7890',
-                eAccentSoft,
-                eAccent,
+              ...List.generate(
+                contacts.length,
+                (index) {
+                  final colors = [
+                    (const Color(0xFFE5F3EA), const Color(0xFF2E8F5E)),
+                    (const Color(0xFFE1E9F7), const Color(0xFF1F5C56)),
+                    (eAccentSoft, eAccent),
+                  ];
+                  final (bgColor, iconColor) = colors[index % colors.length];
+
+                  return Column(
+                    children: [
+                      _buildContactButton(
+                        context,
+                        contacts[index]['name']!,
+                        contacts[index]['relation']!,
+                        contacts[index]['number']!,
+                        bgColor,
+                        iconColor,
+                      ),
+                      if (index < contacts.length - 1)
+                        const SizedBox(height: 10),
+                    ],
+                  );
+                },
               ),
               const SizedBox(height: 30),
 
@@ -233,31 +388,31 @@ class EmergencyScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 12),
-              _buildContactButton(
-                context,
-                '은평구청',
-                '복지담당',
-                '02-351-4114',
-                const Color(0xFFF0E8D5),
-                const Color(0xFF8B6F47),
-              ),
-              const SizedBox(height: 10),
-              _buildContactButton(
-                context,
-                '김영희 요양보호사',
-                '돌봄 담당',
-                '010-9876-5432',
-                const Color(0xFFFFEDD5),
-                const Color(0xFFE65100),
-              ),
-              const SizedBox(height: 10),
-              _buildContactButton(
-                context,
-                '서울의료원',
-                '병원',
-                '02-2276-8114',
-                const Color(0xFFE0F2F1),
-                const Color(0xFF00695C),
+              ...List.generate(
+                otherContacts.length,
+                (index) {
+                  final colors = [
+                    (const Color(0xFFF0E8D5), const Color(0xFF8B6F47)),
+                    (const Color(0xFFFFEDD5), const Color(0xFFE65100)),
+                    (const Color(0xFFE0F2F1), const Color(0xFF00695C)),
+                  ];
+                  final (bgColor, iconColor) = colors[index % colors.length];
+
+                  return Column(
+                    children: [
+                      _buildContactButton(
+                        context,
+                        otherContacts[index]['name']!,
+                        otherContacts[index]['relation']!,
+                        otherContacts[index]['number']!,
+                        bgColor,
+                        iconColor,
+                      ),
+                      if (index < otherContacts.length - 1)
+                        const SizedBox(height: 10),
+                    ],
+                  );
+                },
               ),
             ],
           ),
